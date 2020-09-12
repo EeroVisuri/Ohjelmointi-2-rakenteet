@@ -12,6 +12,10 @@ int main()
             cout << "zip"<<endl;
             i++;
         }
+        if (i%7==0) { //if i is divisible by 7, we print boing instead of the number
+            cout << "boing"<<endl;
+            i++;
+        }
         else { //in any other case we print out the current number
             cout << i<<endl;
             i++;
