@@ -5,7 +5,7 @@ using namespace std;
 // Function that asks user to input numbers and counts the mean
 float meanCalculator(int integers) {
     float mean;
-    float allintegers;
+    int allintegers;
     for (int var = 1; var <= integers; ++var) {
         int addnumber;
         cout << "Input " << var << ". number: ";
@@ -14,7 +14,8 @@ float meanCalculator(int integers) {
     }
 
     float givenints = static_cast < float > (integers);
-    mean = allintegers / givenints;
+    float allints = static_cast< float >(allintegers);
+    mean = allints / givenints;
     return mean;
 }
 
