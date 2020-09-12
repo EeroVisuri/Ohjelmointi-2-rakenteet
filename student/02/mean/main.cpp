@@ -1,11 +1,20 @@
 #include <iostream>
 using namespace std;
-// Write here a function counting the mean value
+
+
+// Function that asks user to input numbers and counts the mean
 float meanCalculator(int integers) {
     float mean;
-    for (int var = 0; var < integers; ++var) {
-
+    int allintegers;
+    for (int var = 1; var <= integers; ++var) {
+        int addnumber;
+        cout << "Input " << var << ". number: ";
+        cin >>  addnumber;
+        allintegers = allintegers + addnumber;
     }
+    float addedints = allintegers;
+    float givenints = integers;
+    mean = addedints / givenints;
     return mean;
 }
 
@@ -16,9 +25,11 @@ int main()
     cin >> integers;
 
     if (integers >0 ) {
-        meanCalculator(integers);
+        float answer = meanCalculator(integers);
+        cout << "Mean value of the given numbers is " << answer<<endl;
+
     }
     else {
-        cout << "Cannot count mean value from "<<integers;
+        cout << "Cannot count mean value from " <<integers <<" numbers" << endl;
     }
 }
