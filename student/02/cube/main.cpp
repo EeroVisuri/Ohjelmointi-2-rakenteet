@@ -10,7 +10,7 @@ int overFlowcheck(int usersnnumber, int result) {
     if (result > INT_MAX) {
         return 1;
     }
-    if (result < usersnnumber) {
+    if (result <= usersnnumber) {
         return 1;
     }
     if (usersnnumber > 0 && result > 0) {
@@ -28,7 +28,7 @@ int overFlowcheck(int usersnnumber, int result) {
 int main() {
     //taking the input and saving it in a variable
     int usersnumber;
-    cout << "Enter a number: " <<endl;
+    cout << "Enter a number: ";
     cin >> usersnumber;
     //doing the calculations
     int result = usersnumber*usersnumber*usersnumber;
