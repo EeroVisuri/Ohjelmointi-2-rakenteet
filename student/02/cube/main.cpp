@@ -10,7 +10,7 @@ int overFlowcheck(int usersnnumber, int result) {
     if (result > INT_MAX) {
         return 1;
     }
-    if (result <= usersnnumber) {
+    if (result < usersnnumber) {
         return 1;
     }
     if (usersnnumber > 0 && result > 0) {
