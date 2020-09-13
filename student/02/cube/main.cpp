@@ -7,6 +7,9 @@ using namespace std;
 
 //if this method returns 1, you have overflowed. It will return 0 otherwise.
 int overFlowcheck(int usersnnumber, int result) {
+    if (usersnnumber == 0 && result == 0) {
+        return 0;
+    }
     if (result > INT_MAX) {
         return 1;
     }
