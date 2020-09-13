@@ -31,6 +31,6 @@ int main()
 
     }
     else {
-        cout << "Cannot count mean value from " <<integers <<" numbers" << endl;
+        cout << "Cannot count mean value from " <<integers << " numbers" << endl;
     }
 }
