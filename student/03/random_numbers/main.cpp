@@ -23,7 +23,7 @@ void produce_random_numbers(unsigned int lower, unsigned int upper)
     //A while-loop to run the rng until user_input is 'q'.
     char user_input = ' ';
     while (true) {
-        std::cout << "Press enter to continue or q to quit:";
+        std::cout << "Press enter to continue or q to quit: ";
         //save input, discarding whitespaces
         user_input = cin.get();
         //if input was 'q', we break the loop
