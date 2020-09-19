@@ -23,6 +23,12 @@ void produce_random_numbers(unsigned int lower, unsigned int upper)
     //A while-loop to run the rng until user_input is 'q'.
     char user_input = ' ';
     while (true) {
+        //Let's give the user a random number
+        uniform_int_distribution<int> randomNumberInRange(lower, upper);
+        int number = randomNumberInRange(rand_engine);
+        std::cout << "Your drawn random number is " << number << endl;
+
+        //After user has gotten their first random number, ask them if they want to continue.
         std::cout << "Press enter to continue or q to quit: ";
         //save input, discarding whitespaces
         user_input = cin.get();
@@ -31,11 +37,8 @@ void produce_random_numbers(unsigned int lower, unsigned int upper)
             break;
         }
         else {
-            uniform_int_distribution<int> randomNumberInRange(lower, upper);
-            int number = randomNumberInRange(rand_engine);
-            std::cout << "Your drawn random number is " << number << endl;
+            continue;
         }
-
     }
 }
 
