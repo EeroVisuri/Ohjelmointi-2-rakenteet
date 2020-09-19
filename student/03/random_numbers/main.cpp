@@ -13,6 +13,7 @@ void produce_random_numbers(unsigned int lower, unsigned int upper)
 
     std::string seed_value = "";
     getline(std::cin, seed_value);
+    cout << endl;
     if( seed_value == "" ) {
         // If the user did not give a seed value, use computer time as the seed value.
         rand_engine.seed( time(NULL) );
@@ -26,13 +27,14 @@ void produce_random_numbers(unsigned int lower, unsigned int upper)
         //Let's give the user a random number
         uniform_int_distribution<int> randomNumberInRange(lower, upper);
         int number = randomNumberInRange(rand_engine);
-        std::cout << "Your drawn random number is " << number << endl;
+        std::cout << "Your drawn random number is " << number <<endl;
 
         //After user has gotten their first random number, ask them if they want to continue.
-        std::cout << "Press enter to continue or q to quit: "<<endl;
+        std::cout << "Press enter to continue or q to quit: ";
         //save input, discarding whitespaces
         user_input = cin.get();
         //if input was 'q', we break the loop
+        cout << endl;
         if (user_input == 'q') {
             break;
         }
