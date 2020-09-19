@@ -29,7 +29,7 @@ void produce_random_numbers(unsigned int lower, unsigned int upper)
         std::cout << "Your drawn random number is " << number << endl;
 
         //After user has gotten their first random number, ask them if they want to continue.
-        std::cout << "Press enter to continue or q to quit: ";
+        std::cout << "Press enter to continue or q to quit: "<<endl;
         //save input, discarding whitespaces
         user_input = cin.get();
         //if input was 'q', we break the loop
