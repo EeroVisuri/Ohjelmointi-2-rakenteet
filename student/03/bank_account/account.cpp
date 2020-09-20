@@ -82,6 +82,7 @@ bool Account::set_credit_limit(int new_credit_limit) {
         return true;
     }
     else {
+        cout << "Cannot set credit limit: the account has no credit card"<<endl;
         return false;
     }
 
@@ -93,15 +94,13 @@ void Account::save_money(int add_to_balance) {
 
 bool Account::take_money(int remove_from_balance) {
     if (this->has_credit==false && this->balance-remove_from_balance < 0) {
-        cout << "Cannot take money: balance underflow"<< endl << "Transfer from ";
-        this->getIban();
-        cout << " failed";
+        cout << "Cannot take money: balance underflow"<< endl;
         return false;
     }
     else if (this->has_credit==true && this->balance+this->credit_limit < remove_from_balance) {
         cout << "Cannot take money: credit limit overflow" << endl << "Transfer from ";
                 this->getIban();
-                cout << " failed";
+                cout << " failed"<<endl;
                 return false;
     }
     else if (this->balance-remove_from_balance < this->balance+this->credit_limit) {
@@ -110,7 +109,7 @@ bool Account::take_money(int remove_from_balance) {
         this->getIban();
         cout << " is ";
         this->getBalance();
-        cout << " euros";
+        cout << " euros"<<endl;
         return true;
     }
 
@@ -122,6 +121,9 @@ bool Account::take_money(int remove_from_balance) {
 
 void Account::transfer_to(Account&customer, int value) {
     if (this->take_money(value)==false) {
+        cout << "Transfer from ";
+        this->getIban();
+        cout << " failed"<<endl;
         return;
     }
     else {
