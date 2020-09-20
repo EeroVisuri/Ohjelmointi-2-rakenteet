@@ -73,7 +73,7 @@ void Account::print() const {
     this->getIban();
     cout << " : ";
     this->getBalance();
-    cout << "euros" << endl;
+    cout << " euros" << endl;
 }
 
 bool Account::set_credit_limit(int new_credit_limit) {
