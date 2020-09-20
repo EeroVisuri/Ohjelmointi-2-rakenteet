@@ -7,6 +7,14 @@ using namespace std;
 // Setting initial value for the static attribute running_number_
 int Account::running_number_ = 0;
 
+Account::Account(const string &owner, bool has_credit)
+{
+    this->owner = owner;
+    this->has_credit = has_credit;
+    this->generate_iban();
+    this->setBalance(0);
+
+}
 
 
 void Account::generate_iban() {
@@ -39,35 +47,87 @@ void Account::getBalance() const
 
 void Account::setBalance(int newBalance)
 {
-    balance = newBalance;
+    this->balance = newBalance;
+}
+
+
+
+void Account::setCredit(bool has_credit)
+{
+    this->has_credit = has_credit;
+}
+
+void Account::setName(string owner)
+{
+    this->owner = owner;
+}
+
+void Account::getName() const
+{
+    cout << this->owner;
 }
 
 void Account::print() const {
-    cout << owner << " : ";
-    getIban();
+    cout << this->owner;
     cout << " : ";
-    getBalance();
+    this->getIban();
+    cout << " : ";
+    this->getBalance();
     cout << "euros" << endl;
 }
 
-void Account::set_credit_limit(int new_credit_limit) {
-    credit_limit = new_credit_limit;
-}
-
-void Account::save_money(int add_to_balance) {
-    balance = balance+add_to_balance;
-}
-
-void Account::take_money(int remove_from_balance) {
-    if (balance-remove_from_balance > credit_limit) {
-        balance = balance-remove_from_balance;
+bool Account::set_credit_limit(int new_credit_limit) {
+    if (this->has_credit) {
+        this->credit_limit = new_credit_limit;
+        return true;
+    }
+    else {
+        return false;
     }
 
 }
 
-void Account::transfer_to(Account account, int value) {
-    this->take_money(value);
-    account.save_money(value);
+void Account::save_money(int add_to_balance) {
+    this->balance = this->balance+add_to_balance;
+}
+
+bool Account::take_money(int remove_from_balance) {
+    if (this->has_credit==false && this->balance-remove_from_balance < 0) {
+        cout << "Cannot take money: balance underflow"<< endl << "Transfer from ";
+        this->getIban();
+        cout << " failed";
+        return false;
+    }
+    else if (this->has_credit==true && this->balance+this->credit_limit < remove_from_balance) {
+        cout << "Cannot take money: credit limit overflow" << endl << "Transfer from ";
+                this->getIban();
+                cout << " failed";
+                return false;
+    }
+    else if (this->balance-remove_from_balance < this->balance+this->credit_limit) {
+        this->balance = (this->balance - remove_from_balance);
+        cout << remove_from_balance << " euros taken: new balance of ";
+        this->getIban();
+        cout << " is ";
+        this->getBalance();
+        cout << " euros";
+        return true;
+    }
+
+    else {
+        cout << "Something weird went wrong this should not happen.";
+        return false;
+    }
+}
+
+void Account::transfer_to(Account&customer, int value) {
+    if (this->take_money(value)==false) {
+        return;
+    }
+    else {
+        customer.balance = customer.balance+value;
+        return;
+    }
 }
 
 

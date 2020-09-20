@@ -7,24 +7,35 @@ class Account
 {
 public:
     // Constructor
-    Account(const std::string& owner, bool has_credit = false);
+    Account(const std::string& owner, bool has_credit = false)  ;
+
+
 
     // More methods
+
+    //sets the credit for account
+    void setCredit(bool has_credit);
+
+    //Setting the account owners name.
+    void setName(std::string owner);
+
+    //Getting the account owners name.
+    void getName() const;
 
     //Method for printing out account names, IBANS and how much money is on them
     void print() const;
 
-    //sets credit limit to an account
-    void set_credit_limit(int new_credit_limit);
+    //sets credit limit to an account, returns true on success, false otherwise.
+    bool set_credit_limit(int new_credit_limit);
 
     //saves money to an account
     void save_money(int add_to_balance);
 
     //takes money from an account, up to maximum negative of credit limit.
-    void take_money(int remove_from_balance);
+    bool take_money(int remove_from_balance);
 
     //transfers money from current account to another account
-    void transfer_to(Account, int value);
+    void transfer_to(Account& customer, int value);
 
 
     //gets you the balance of the account
@@ -36,8 +47,6 @@ public:
 
     void getIban() const;
 
-    //owner's name
-    std::string owner;
 
 
 private:
@@ -54,11 +63,19 @@ private:
 
     //balance of an account
     int balance;
-    //account's credit limit
+
+    //account credit limit
     int credit_limit;
 
-    //accounts' IBAN
+    //account credit
+    bool has_credit;
+
+    //account IBAN
     std::string iban_;
+    //account owner
+    std::string owner;
+
+
 
 
 
