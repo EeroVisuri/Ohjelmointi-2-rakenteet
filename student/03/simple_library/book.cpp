@@ -31,12 +31,10 @@ void Book::print()
     cout << this->author << " : " << this->bookName <<"\n";
     //print due date if loaned
     if (this->is_loaned == true) {
-        cout << "- loaned ";
+        cout << "- loaned: ";
         this->day_of_loan.print();
-        cout << "\n";
-        cout << "- to be returned ";
+        cout << "- to be returned: ";
         this->due_date.print();
-        cout << "\n";
         return;
     }
 
