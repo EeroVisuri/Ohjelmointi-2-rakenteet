@@ -14,8 +14,7 @@ public:
     // default value 1 used instead.
     Date(unsigned int day, unsigned int month, unsigned int year);
 
-    // Destructor
-    ~Date();
+
 
     // Advances the date with given amount of days.
     // Can't be anvanced by negative amounts.

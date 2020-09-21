@@ -8,18 +8,19 @@ using namespace std;
 class Book
 {
 
-    // Default constructor.
-    //
-    Book();
+
 
 
 public:
 
+    // Default constructor.
+    //
+    Book();
+
     // Constructor.
     Book(string author, string bookName);
 
-    // Destructor
-    ~Book();
+
 
     //methods
 

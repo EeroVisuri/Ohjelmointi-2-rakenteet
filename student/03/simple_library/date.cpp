@@ -24,9 +24,7 @@ Date::Date(unsigned int day, unsigned int month, unsigned int year):
     }
 }
 
-Date::~Date()
-{
-}
+
 
 void Date::advance(unsigned int days)
 {

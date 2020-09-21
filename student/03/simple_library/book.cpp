@@ -30,16 +30,18 @@ void Book::print()
     //Always print author and book name
     cout << this->author << " : " << this->bookName <<endl;
     //print due date if loaned
-    if (is_loaned) {
+    if (this->is_loaned == true) {
         cout << "- loaned ";
-        std::cout << &this->day_of_loan << endl;
+        this->day_of_loan.print();
         cout << "- to be returned ";
-        cout << &this->due_date <<endl;
+        this->due_date.print();
+        return;
     }
 
     //otherwise it's available
-    else {
-        cout << "- available";
+    else if (this->is_loaned == false) {
+        cout << "- available" << endl;
+        return;
     }
 }
 //loans a book
@@ -47,11 +49,15 @@ void Book::loan(Date today)
 {
     if (this->is_loaned==true) {
         cout << "Already loaned: cannot be loaned" << endl;
+        return;
     }
-    this->is_loaned = true;
-    Date loandate = today;
-    loandate.advance(28);
-    this->due_date = loandate;
+    else {
+        this->is_loaned = true;
+        Date loandate = today;
+        loandate.advance(28);
+        this->due_date = loandate;
+    }
+
 }
 //renews a loan
 void Book::renew()
