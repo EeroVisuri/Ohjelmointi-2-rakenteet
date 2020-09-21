@@ -29,7 +29,7 @@ public:
     void print();
 
     //loans the book if it's available, takes Dates as parameter pointer, due date 28 days later
-    void loan(Date today);
+    void loan(Date& today);
 
     //renews the loan from old due date
     void renew();

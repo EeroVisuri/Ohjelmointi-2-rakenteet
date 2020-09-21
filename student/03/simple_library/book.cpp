@@ -45,7 +45,7 @@ void Book::print()
     }
 }
 //loans a book
-void Book::loan(Date today)
+void Book::loan(Date& today)
 {
     if (this->is_loaned==true) {
         cout << "Already loaned: cannot be loaned" << endl;
@@ -54,6 +54,7 @@ void Book::loan(Date today)
     else {
         this->is_loaned = true;
         Date loandate = today;
+        this->day_of_loan = loandate;
         loandate.advance(28);
         this->due_date = loandate;
     }
@@ -62,14 +63,14 @@ void Book::loan(Date today)
 //renews a loan
 void Book::renew()
 {
-
-    Date renewed_date = this->day_of_loan;
+    Date renewed_date = this->due_date;
     renewed_date.advance(28);
     this->due_date = renewed_date;
 }
 //gives back a book
 void Book::give_back()
 {
+    this->is_loaned = false;
 
 }
 
