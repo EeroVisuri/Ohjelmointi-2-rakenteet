@@ -28,13 +28,15 @@ Book::Book(std::string author, std::string bookName)
 void Book::print()
 {
     //Always print author and book name
-    cout << this->author << " : " << this->bookName <<endl;
+    cout << this->author << " : " << this->bookName <<"\n";
     //print due date if loaned
     if (this->is_loaned == true) {
         cout << "- loaned ";
         this->day_of_loan.print();
+        cout << "\n";
         cout << "- to be returned ";
         this->due_date.print();
+        cout << "\n";
         return;
     }
 
