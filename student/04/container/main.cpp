@@ -58,7 +58,20 @@ bool is_arithmetic_series (std::vector<int>integers) {
 
 // returns true if numbers in a vector have constant ratio between consecutive integers
 bool is_geometric_series (std::vector<int>integers) {
+
     int n = integers.size();
+
+    //first let's check we don't accidentally divide by zero so nothing terrible happens
+    //also series of only zeros is not considered as geometric.
+    for (int var = 1; var < n; ++var) {
+        int previndex = integers.at(var-1);
+        if (previndex == 0 && integers.at(var) == 0) {
+            return false;
+        }
+    }
+
+
+
     //checking ratio
     int ratio = integers[1] / integers[0];
     //for-loop to check if ratio remains
