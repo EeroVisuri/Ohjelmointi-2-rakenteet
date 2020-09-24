@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <sstream>
 
 using namespace std;
 
@@ -21,19 +22,12 @@ std::vector<std::string> split(std::string line, char separator, ...) {
 
     //initialize the vector we're going to return
     std::vector<std::string> splitUpString;
-
+    std::string s;
+    std::istringstream stringStream(line);
     //if we're told to ignore the empty parts we do this
     if(!includingEmpty) {
-        for (int var = 0; var < n; ++var) {
-            if (line.at(var) != separator) {
-                string s;
-                s = line.at(var);
-                splitUpString.push_back(s);
-            }
-            else if (line.at(var) == separator) {
-              splitUpString.push_back(" ");
-
-            }
+        while (std::getline(stringStream, s, separator)) {
+            splitUpString.push_back(s);
         }
     }
 
