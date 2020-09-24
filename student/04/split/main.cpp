@@ -4,7 +4,6 @@
 #include <sstream>
 #include <algorithm>
 
-using namespace std;
 
 
 
@@ -37,9 +36,6 @@ std::vector<std::string> split(std::string line, char separator, bool includingE
         while (std::getline(stringStream, s, separator)) {
             if (!s.empty()) {
                 splitUpString.push_back(s);
-            }
-            else {
-                continue;
             }
         }
     }
