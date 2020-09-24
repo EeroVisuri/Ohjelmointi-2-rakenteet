@@ -2,23 +2,23 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <algorithm>
 
 using namespace std;
+
+
+
 
 // TODO: Implement split function here
 // Do not change main function
 
 
-std::vector<std::string> split(std::string line, char separator, ...) {
 
-    //save the line's length into a variable and another variable for if we're ignoring empty parts
-    int n = line.size();
 
-    //I'll fix this later
-    bool includingEmpty = false;
-    //    if (ignoreEmpty == true) {
-    //        includingEmpty = true;
-    //    }
+
+//function to split a string vector, gets string to be separated, separator char and can take a bool to ignore empty spaces.
+std::vector<std::string> split(std::string line, char separator, bool includingEmpty = false) {
+
 
     //initialize the vector we're going to return
     std::vector<std::string> splitUpString;
@@ -29,12 +29,20 @@ std::vector<std::string> split(std::string line, char separator, ...) {
         while (std::getline(stringStream, s, separator)) {
             splitUpString.push_back(s);
         }
+        return splitUpString;
     }
 
-    //if not, we do this instead
- //   if(includingEmpty) {
-
- // }
+    //if not, we do this instead to skip whitespaces
+    if(includingEmpty) {
+        while (std::getline(stringStream, s, separator)) {
+            if (!s.empty()) {
+                splitUpString.push_back(s);
+            }
+            else {
+                continue;
+            }
+        }
+    }
     return splitUpString;
 }
 
