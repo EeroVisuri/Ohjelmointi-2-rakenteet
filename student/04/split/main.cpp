@@ -16,32 +16,22 @@
 
 
 //function to split a string vector, gets string to be separated, separator char and can take a bool to ignore empty spaces.
-std::vector<std::string> split(std::string line, char separator, bool includingEmpty = false) {
+std::vector<std::string> split(std::string line, char separator, bool ignoreEmpty = false) {
 
 
     //initialize the vector we're going to return
     std::vector<std::string> splitUpString;
     std::string s;
     std::istringstream stringStream(line);
-    //if we're told to ignore the empty parts we do this
-    if(!includingEmpty) {
-        while (std::getline(stringStream, s, separator)) {
+
+    while (std::getline(stringStream, s, separator)) {
+        if (!ignoreEmpty || !s.empty()) {
             splitUpString.push_back(s);
         }
-        return splitUpString;
     }
 
-    //if not, we do this instead to skip whitespaces
-    if(includingEmpty) {
-        while (std::getline(stringStream, s, separator)) {
-            if (!s.empty()) {
-                splitUpString.push_back(s);
-            }
-        }
-    }
     return splitUpString;
 }
-
 
 
 int main()
