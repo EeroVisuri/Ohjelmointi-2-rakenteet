@@ -19,6 +19,7 @@
 std::vector<std::string> split(std::string line, char separator, bool ignoreEmpty = false) {
 
 
+
     //initialize the vector we're going to return
     std::vector<std::string> splitUpString;
     std::string s;
@@ -29,7 +30,11 @@ std::vector<std::string> split(std::string line, char separator, bool ignoreEmpt
             splitUpString.push_back(s);
         }
     }
-
+    if (!ignoreEmpty) {
+        splitUpString.push_back("");
+    } else {
+        return splitUpString;
+    }
     return splitUpString;
 }
 
