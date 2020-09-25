@@ -25,12 +25,19 @@ std::vector<std::string> split(std::string line, char separator, bool ignoreEmpt
     std::string s;
     std::istringstream stringStream(line);
 
+
+
     while (std::getline(stringStream, s, separator)) {
         if (!ignoreEmpty || !s.empty()) {
             splitUpString.push_back(s);
         }
     }
-    if (!ignoreEmpty) {
+
+
+    //ugly hack to get newline correctly in if last character was a separator character
+    char lastchar = line.back();
+    //if the last character in line is the separator character, we push a newline at the vector's back.
+    if (lastchar == separator) {
         splitUpString.push_back("");
     } else {
         return splitUpString;
