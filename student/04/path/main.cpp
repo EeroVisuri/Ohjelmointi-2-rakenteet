@@ -69,20 +69,18 @@ void print(const vector<vector<Slot_type>>& board) {
 // If the given string is not numeric, returns 0.
 unsigned int stoi_with_check(const string& str) {
     bool is_numeric = true;
-    for(unsigned int i = 0; i < str.length(); ++i)
-    {
+    for(unsigned int i = 0; i < str.length(); ++i) {
         if(not isdigit(str.at(i)))
         {
             is_numeric = false;
             break;
         }
     }
-    if(is_numeric)
-    {
+    if(is_numeric) {
+
         return stoi(str);
     }
-    else
-    {
+    else {
         return 0;
     }
 }
@@ -91,13 +89,34 @@ unsigned int stoi_with_check(const string& str) {
 
 
 //todo
-//void move_piece (int startpoint, int destination) {
+//void move_piece (int sx, int sy, int dx, int dy) {
 
 //}
+
+
 //todo
-//bool is_legal_move (int startpoint, int destination) {
+//bool is_legal_move (int sx, int sy, int dx, int dy) {
 
 //}
+
+//this function checks if user inputs are valid in the current boardstate
+//does NOT take into account hopping over pieces so we gotta do that still
+
+bool is_valid_input (int sx, int sy, int dx, int dy,
+                     const vector<vector<Slot_type>>& board) {
+
+//if the starting position has either a green or a red knob, we can proceed
+    if (board[sx][sy] == GREEN || RED) {
+        //if the destination space is unused, it's a valid move and we return true
+        if (board[dx][dy] == UNUSED) {
+            return true;
+        //else we just return false
+        } else {
+            return false;
+        }
+    }
+    return false;
+}
 
 
 std::vector<std::vector<Slot_type> > initialize_board () {
@@ -119,9 +138,37 @@ std::vector<std::vector<Slot_type> > initialize_board () {
 
 
 int main() {
-
+    //initializing the board so we can play and printing the initial position of knobs
     vector<std::vector<Slot_type>>board = initialize_board();
     print(board);
 
-    return 0;
+    bool playing = true;
+    while (playing) {
+        int movestotal = 0;
+        //variable to save current move
+        string current_move;
+        cout << INPUT_TEXT;
+        cin >>  current_move;
+
+        //if the command was the order to quit, print out how many moves we made and stop playing.
+        if (current_move == "q") {
+                    cout << movestotal << MOVES_MADE;
+                    playing = false;
+                    break;
+                }
+
+        //checking if current move was input properly and was legal
+        int moves = stoi_with_check(current_move);
+        if (moves == 0) {
+            cout << INVALID_POINT << endl;
+        }
+
+//        else if (!is_valid_input(moves, board)) {
+//            cout << CANNOT_MOVE << endl;
+//        }
+//        else if (is_legal_move) {
+//            //move the pieces and add to moves made calculator
+//        }
+
+    }
 }
