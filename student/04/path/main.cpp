@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -69,6 +70,7 @@ void print(const vector<vector<Slot_type>>& board) {
 // If the given string is not numeric, returns 0.
 unsigned int stoi_with_check(const string& str) {
     bool is_numeric = true;
+    string s = str;
     for(unsigned int i = 0; i < str.length(); ++i) {
         if(not isdigit(str.at(i)))
         {
@@ -77,15 +79,25 @@ unsigned int stoi_with_check(const string& str) {
         }
     }
     if(is_numeric) {
-
-        return stoi(str);
+        s.erase(remove(s.begin(), s.end(), ' '), s.end());
+        return stoi(s);
     }
     else {
         return 0;
     }
 }
-
 // More functions
+
+//if win condition has been met, returns true, otherwise false.
+
+bool game_over(const vector<vector<Slot_type>>& board) {
+    if (board[1][1]&&board[1][2]&&board[1][3]&&board[1][4] == RED) {
+        if (board[5][1]&&board[5][2]&&board[5][3]&&board[5][4] == GREEN) {
+            return true;
+        }
+    }
+    return false;
+}
 
 
 //todo
@@ -130,19 +142,29 @@ std::vector<std::vector<Slot_type> > initialize_board () {
     return board;
 
 
+
 }
 
+void playloop () {
 
 
-
-
-
-int main() {
     //initializing the board so we can play and printing the initial position of knobs
     vector<std::vector<Slot_type>>board = initialize_board();
     print(board);
 
+
+
+    //some variables to store gamestates
     bool playing = true;
+
+
+    //check if game ended
+    if (game_over(board)) {
+        cout << GAME_OVER;
+        playing = false;
+    }
+
+
     while (playing) {
         int movestotal = 0;
         //variable to save current move
@@ -150,9 +172,11 @@ int main() {
         cout << INPUT_TEXT;
         cin >>  current_move;
 
+
+
         //if the command was the order to quit, print out how many moves we made and stop playing.
         if (current_move == "q") {
-                    cout << movestotal << MOVES_MADE;
+                    cout << movestotal << MOVES_MADE <<endl;
                     playing = false;
                     break;
                 }
@@ -163,12 +187,32 @@ int main() {
             cout << INVALID_POINT << endl;
         }
 
-//        else if (!is_valid_input(moves, board)) {
-//            cout << CANNOT_MOVE << endl;
-//        }
+
+        //if the input was proper, we move it's digits into gamestate variables
+        else {
+            int sx = moves / 1000 % 10;       //first digit
+            int sy = moves / 100 % 10;        //second digit
+            int dx = moves / 10 % 10;         //third digit
+            int dy = moves  % 10;             //fourth digit
+
+            if (!is_valid_input(sx, sy, dx, dy, board)) {
+                cout << CANNOT_MOVE << endl;
+            }
+            else {
+                //liike vai tsekkaus?
+            }
+        }
+
 //        else if (is_legal_move) {
 //            //move the pieces and add to moves made calculator
 //        }
 
     }
+}
+
+
+
+
+int main() {
+    playloop();
 }
