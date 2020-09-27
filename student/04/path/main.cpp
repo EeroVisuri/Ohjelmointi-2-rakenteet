@@ -71,8 +71,8 @@ void print(const vector<vector<Slot_type>>& board) {
 // If the given string is not numeric, returns 0.
 
 
-
-string removeSpaces(string str)
+//function to remove spaces from a string
+string remove_spaces(string str)
 {
     str.erase(remove(str.begin(), str.end(), ' '), str.end());
     return str;
@@ -90,7 +90,6 @@ unsigned int stoi_with_check(const string& str)
         }
     }
     if(is_numeric) {
-        removeSpaces(str);
         return stoi(str);
     }
     else
@@ -223,7 +222,7 @@ void playloop () {
         int movestotal = 0;
 
         //command given by user
-        string user_command = "";
+        string user_command;
         //command sorted into an integer
         int moves = 0;
         //variables to save move
@@ -240,8 +239,7 @@ void playloop () {
         //grabbing command from user
         cout << INPUT_TEXT;
         cin >>  user_command;
-
-
+        cout << "User command should now be spaceless" << user_command << endl;
 
         //if the command was the order to quit, print out how many moves we made and stop playing.
         if (user_command == "q") {
@@ -251,6 +249,7 @@ void playloop () {
                 }
 
         //checking if current move was input properly
+
         moves = stoi_with_check(user_command);
         cout <<"here's moves: "<< moves <<endl;
         //if stoi_with_check returns a 0, we know something was wrong with input
@@ -260,15 +259,15 @@ void playloop () {
         }
         //if the input was proper, we move it's digits into gamestate variables
         else {
-            sx = (moves / 1000 % 10);           //first digit
-            sy = (moves / 100 % 10);            //second digit
-            dx = (moves / 10 % 10);             //third digit
-            dy = (moves  % 10);                 //fourth digit
+            sx = moves / 1000 % 10;           //first digit
+            sy = moves / 100 % 10;            //second digit
+            dx = moves / 10 % 10;             //third digit
+            dy = moves  % 10;                 //fourth digit
             cout << "moves is: " << moves << endl;
             cout << "sx is: " <<sx <<endl;
-            cout << "sy is: " <<sx<<endl;
-            cout << "dx is: " <<sx<<endl;
-            cout << "dy is: " <<sx<<endl;
+            cout << "sy is: " <<sy<<endl;
+            cout << "dx is: " <<dx<<endl;
+            cout << "dy is: " <<dy<<endl;
         }
         //if there's an issue with the command, print cannot move and continue
         if (!is_valid_input(sx, sy, dx, dy, board)) {
