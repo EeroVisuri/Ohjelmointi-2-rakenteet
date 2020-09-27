@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <string>
 
 using namespace std;
 
@@ -68,10 +69,20 @@ void print(const vector<vector<Slot_type>>& board) {
 // Converts the given numeric string to the corresponding integer
 // (by calling stoi).
 // If the given string is not numeric, returns 0.
-unsigned int stoi_with_check(const string& str) {
+
+
+
+string removeSpaces(string str)
+{
+    str.erase(remove(str.begin(), str.end(), ' '), str.end());
+    return str;
+}
+
+unsigned int stoi_with_check(const string& str)
+{
     bool is_numeric = true;
-    string s = str;
-    for(unsigned int i = 0; i < str.length(); ++i) {
+    for(unsigned int i = 0; i < str.length(); ++i)
+    {
         if(not isdigit(str.at(i)))
         {
             is_numeric = false;
@@ -79,16 +90,22 @@ unsigned int stoi_with_check(const string& str) {
         }
     }
     if(is_numeric) {
-        s.erase(remove(s.begin(), s.end(), ' '), s.end());
-        return stoi(s);
+        removeSpaces(str);
+        return stoi(str);
     }
-    else {
+    else
+    {
         return 0;
     }
 }
+
 // More functions
 
 //if win condition has been met, returns true, otherwise false.
+
+
+
+
 
 bool game_over(const vector<vector<Slot_type>>& board) {
     if (board[0][0]&&board[0][1]&&board[0][2]&&board[0][3] == RED) {
@@ -100,22 +117,63 @@ bool game_over(const vector<vector<Slot_type>>& board) {
 }
 
 
-//todo
-//void move_piece (int sx, int sy, int dx, int dy) {
 
-//}
+void move_piece (int sx, int sy, int dx, int dy, vector<vector<Slot_type>>& board ) {
 
-
-bool is_valid_move (int sx, int sy, int dx, int dy,
-                    const vector<vector<Slot_type>>& board) {
-    //todo check if move is valid lol
+    Slot_type prev_slot;
+    prev_slot = board.at(sx).at(sy);
+    board[dx][dy] = prev_slot;
 
 }
 
 
-//this function checks if user inputs are valid in the current boardstate
-//does NOT take into account hopping over pieces so we gotta do that still
+bool horizontal_movement_check(int sx, int dx, int sy, const vector<vector<Slot_type>>& board) {
 
+    //Check if there's a knob in the way in a horizontal path
+    cout << "Got to horizontal_movement_check before crashing";
+    for (int i = sx; i <= dx; ++i) {
+        if (board[i][sy] != UNUSED ) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool vertical_movement_check(int sy, int dy, int sx, const vector<vector<Slot_type>>& board) {
+
+    //first we check if we're on the right path. Only at x 1 or 5 can we move
+    //check if there's a knob in the way of the vertical path
+
+
+
+    cout << "Got to vertical_movement_check before crashing";
+    for (int i = sy; i <= dy; ++i) {
+        if (board[sx][i] != UNUSED) {
+            return false;
+        }
+    }
+    return true;
+}
+
+
+bool is_valid_move (int sx, int sy, int dx, int dy,
+                    const vector<vector<Slot_type>>& board) {
+    cout << "Got to is_valid_move before crashing";
+
+    if (horizontal_movement_check(sx, dx, sy, board) == true) {
+        if (vertical_movement_check(sy, dy, sx, board) == true) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    return false;
+}
+
+
+//this function checks if user inputs are valid in the current boardstate
+//does NOT take into account hopping over pieces so we gotta do that in other functions above
 
 //this function checks if pieces are in correct
 bool is_valid_input (int sx, int sy, int dx, int dy,
@@ -156,27 +214,26 @@ void playloop () {
 
     //initializing the board so we can play and printing the initial position of knobs
     vector<std::vector<Slot_type>>board = initialize_board();
-    print(board);
     bool playing = true;
-
+    print(board);
     while (playing) {
+
 
         //variable to save current move total
         int movestotal = 0;
 
         //command given by user
-        string user_command;
+        string user_command = "";
         //command sorted into an integer
-        int moves;
+        int moves = 0;
         //variables to save move
         int sx;
         int sy;
         int dx;
         int dy;
-
         //check if game ended
         if (game_over(board)) {
-            cout << GAME_OVER;
+            cout << GAME_OVER <<endl;
             playing = false;
         }
 
@@ -193,9 +250,9 @@ void playloop () {
                     break;
                 }
 
-
         //checking if current move was input properly
         moves = stoi_with_check(user_command);
+        cout <<"here's moves: "<< moves <<endl;
         //if stoi_with_check returns a 0, we know something was wrong with input
         if (moves == 0) {
             cout << INVALID_POINT << endl;
@@ -203,21 +260,31 @@ void playloop () {
         }
         //if the input was proper, we move it's digits into gamestate variables
         else {
-            sx = moves / 1000 % 10;       //first digit
-            sy = moves / 100 % 10;        //second digit
-            dx = moves / 10 % 10;         //third digit
-            dy = moves  % 10;             //fourth digit
+            sx = (moves / 1000 % 10);           //first digit
+            sy = (moves / 100 % 10);            //second digit
+            dx = (moves / 10 % 10);             //third digit
+            dy = (moves  % 10);                 //fourth digit
+            cout << "moves is: " << moves << endl;
+            cout << "sx is: " <<sx <<endl;
+            cout << "sy is: " <<sx<<endl;
+            cout << "dx is: " <<sx<<endl;
+            cout << "dy is: " <<sx<<endl;
         }
         //if there's an issue with the command, print cannot move and continue
         if (!is_valid_input(sx, sy, dx, dy, board)) {
             cout << CANNOT_MOVE << endl;
             continue;
         }
+
         //if all else went well we'll check if we can move
-        else if (is_valid_move) {
-            //do moving
+        else if (is_valid_move(sx, sy, dx, dy, board)) {      
+            move_piece(sx, sy, dx, dy, board);
+            movestotal = movestotal +1;
+            print(board);
+            continue;
         }
         else {
+            cout << CANNOT_MOVE << endl;
             continue;
         }
 
