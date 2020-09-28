@@ -300,6 +300,7 @@ void playloop () {
         //check if game ended
         if (game_over(board)) {
             cout << GAME_OVER <<endl;
+            cout << movestotal << MOVES_MADE <<endl;
             playing = false;
             break;
         }
