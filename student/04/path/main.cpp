@@ -89,7 +89,11 @@ void print(const vector<vector<Slot_type>>& board) {
 // If the given string is not numeric, returns 0.
 
 
-//function to remove spaces from a string
+/*
+ *  A function for removing whitespaces from a string.
+ *  Input is the string, outputs the string without
+ *  whitespaces.
+ */
 string remove_spaces(string& str)
 {
 
@@ -97,6 +101,14 @@ string remove_spaces(string& str)
               str.end());
     return str;
 }
+
+/*
+ *  A function for converting string to integer.
+ *  Inputs the string to be converted, checks
+ *  if it's numeric, if it is, returns
+ *  the string converted to integer,
+ *  otherwise it returns 0.
+ */
 
 unsigned int stoi_with_check(const string& str)
 {
@@ -120,7 +132,12 @@ unsigned int stoi_with_check(const string& str)
 
 // More functions
 
-//if win condition has been met, returns true, otherwise false.
+/*
+ *  A function for checking if the game is over. If the top row is filled with
+ *  red pieces and bottom row is filled with greens, we have won. Takes
+ *  the boardstate as an input, outputs a boolean true if won, otherwise
+ *  outputs false.
+ */
 
 bool game_over(const vector<vector<Slot_type>>& board) {
     if (board[0][0] == RED && board[0][1] == RED &&board[0][2] == RED
@@ -134,7 +151,12 @@ bool game_over(const vector<vector<Slot_type>>& board) {
     return false;
 }
 
-
+/*
+ *  A function for moving the pieces. It's only called if all the checks for
+ *  input validity and movement return true, so it doesn't do any checking,
+ *  just moves the knob from starting x and y to destination x and y
+ *  coordinates. Also needs the boardstate as input. No outputs.
+ */
 
 void move_piece (int sx, int sy, int dx, int dy, vector<vector<Slot_type>>& board ) {
 
@@ -145,6 +167,12 @@ void move_piece (int sx, int sy, int dx, int dy, vector<vector<Slot_type>>& boar
 
 }
 
+/*
+ *  A function for checking horizontal movement of a piece.
+ *  Inputs starting x, y and destination x coordinates and
+ *  the current boardstate, outputs a boolean
+ *  true if move was valid, false if it wasn't.
+ */
 
 bool horizontal_movement_check(int sx, int dx, int sy, const vector<vector<Slot_type>>& board) {
 
@@ -178,7 +206,11 @@ bool horizontal_movement_check(int sx, int dx, int sy, const vector<vector<Slot_
     throw "Exception from horizontal_movement_check, you broke it mate.";
 }
 
-
+/*
+ *  A function for checking vertical movement of a piece. Inputs starting y, x and
+ *  destination y coordinates and the current boardstate, outputs a boolean
+ *  true if move was valid, false if it wasn't.
+ */
 
 bool vertical_movement_check(int sy, int dy, int sx, const vector<vector<Slot_type>>& board) {
 
@@ -214,7 +246,11 @@ bool vertical_movement_check(int sy, int dy, int sx, const vector<vector<Slot_ty
 }
 
 
-
+/*
+ *  A function for checking if a move is legal. Inputs are starting and
+ *  destination coordinates and current boardstate, outputs a boolean
+ *  based on if the move was valid or not.
+ */
 
 bool is_valid_move (int sx, int sy, int dx, int dy,
                     const vector<vector<Slot_type>>& board) {
@@ -246,10 +282,14 @@ bool is_valid_move (int sx, int sy, int dx, int dy,
 
 
 
-//this function checks if user inputs are valid in the current boardstate
-//does NOT take into account hopping over pieces so we gotta do that in other functions above
+/*this function checks if user inputs are valid in the current boardstate
+* does NOT take into account hopping over pieces so we do that in other
+* function that check validity of moves.
+* inputs are starting and destination coordinates and boardstate,
+* outputs a boolean if inputs are valid.
+*/
 
-//this function checks if pieces are in correct
+
 bool is_valid_input (int sx, int sy, int dx, int dy,
                      const vector<vector<Slot_type>>& board) {
     //if the starting position has either a green or a red knob we can proceed
@@ -268,6 +308,10 @@ bool is_valid_input (int sx, int sy, int dx, int dy,
 }
 
 
+/*
+ *  A function for initializing the board, returns 2d vector called "board".
+ */
+
 std::vector<std::vector<Slot_type> > initialize_board () {
     // Initializing 2D vector "board" with starting values
     vector<vector<Slot_type> > board  { { GREEN, GREEN, GREEN, GREEN },
@@ -282,7 +326,10 @@ std::vector<std::vector<Slot_type> > initialize_board () {
 
 }
 
-
+/*
+ *  A function for main play loop. No inputs or outputs,
+ *  just starts playing the game when called from main.
+ */
 
 void playloop () {
 
