@@ -104,13 +104,11 @@ unsigned int stoi_with_check(const string& str)
 
 //if win condition has been met, returns true, otherwise false.
 
-
-
-
-
 bool game_over(const vector<vector<Slot_type>>& board) {
-    if (board[0][0]&&board[0][1]&&board[0][2]&&board[0][3] == RED) {
-        if (board[4][0]&&board[4][1]&&board[4][2]&&board[4][3] == GREEN) {
+    if (board[0][0] == RED && board[0][1] == RED &&board[0][2] == RED
+            &&board[0][3] == RED) {
+        if (board[4][0] == GREEN &&board[4][1] == GREEN &&board[4][2] == GREEN
+                &&board[4][3] == GREEN) {
             return true;
         }
     }
