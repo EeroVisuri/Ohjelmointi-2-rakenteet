@@ -76,7 +76,7 @@ string remove_spaces(string& str)
 {
 
     str.erase(std::remove(str.begin(), str.end(), ' '),
-                   str.end());
+              str.end());
     return str;
 }
 
@@ -134,39 +134,32 @@ bool horizontal_movement_check(int sx, int dx, int sy, const vector<vector<Slot_
     //Check if there's a knob in the way in a horizontal path
     //if we're just moving vertically we can just return true
     if (sx == dx) {
-        cout << "returned true from horizontal_movement" <<endl;
         return true;
     }
     //else if we're moving to the right, check if we run into something that's not EMPTY
     else if (sx < dx) {
         for (int i = sx+1; i < dx; ++i) {
             if (board[sy][i] != EMPTY ) {
-                cout << "board at[i][sy] had this: " << board[i][sy] << "instead of empty" << endl;
-                cout << "i and sy were" << i << " "  << sy << endl;
-                cout << "Returned false from line 144 from horizontal movement" <<endl;
+
                 return false;
             }
         }
         //if we didn't, we can return true once we reach destination
-        cout << "Returned true from line 149 from horizontal movement" <<endl;
         return true;
-    //else if we're moving to the right, check if we run into something that's not EMPTY
+        //else if we're moving to the right, check if we run into something that's not EMPTY
     } else if (sx > dx) {
         for (int i = sx-1; i > dx; --i) {
             if (board[sy][i] != EMPTY) {
-                cout << "board at[i][sy] had this: " << board[i][sy] << "instead of empty" << endl;
-                cout << "i and sy were" << i << " "  << sy << endl;
-                cout << "Returned false from line 155 from horizontal movement" <<endl;
+
                 return false;
             }
         }
         //again, we can return true once we reach destination
-        cout << "Returned true from line 160 from horizontal movement" <<endl;
         return true;
     }
     //shouldn't get to this point but if we did something clearly went wrong.
     throw "Exception from horizontal_movement_check, you broke it mate.";
-    }
+}
 
 
 
@@ -227,12 +220,10 @@ bool is_valid_move (int sx, int sy, int dx, int dy,
         if (horizontal_movement_check(sx, 1, sy, board)) {
             if(vertical_movement_check(sy, dy, 1, board)) {
                 if (horizontal_movement_check(1, dx, dy, board)) {
-                    cout << "Returned true from line 241 from is_valid_move" <<endl;
                     return true;
                 }
             }
         }
-    cout << "Returned false from is_valid move'ss end" <<endl;
     return false;
 }
 
@@ -244,7 +235,7 @@ bool is_valid_move (int sx, int sy, int dx, int dy,
 //this function checks if pieces are in correct
 bool is_valid_input (int sx, int sy, int dx, int dy,
                      const vector<vector<Slot_type>>& board) {
-//if the starting position has either a green or a red knob we can proceed
+    //if the starting position has either a green or a red knob we can proceed
     if (board[sy][sx] == GREEN) {
         //if the destination space is empty, it's a valid move
         if (board[dy][dx] == EMPTY) {
@@ -281,13 +272,17 @@ void playloop () {
 
     //initializing the board so we can play and printing the initial position of knobs
     vector<std::vector<Slot_type>>board = initialize_board();
+
     bool playing = true;
+    //variable to save current move total
+    int movestotal = 0;
     print(board);
+
     while (playing) {
 
 
-        //variable to save current move total
-        int movestotal = 0;
+
+
 
         //command given by user
         string user_command;
@@ -313,10 +308,10 @@ void playloop () {
 
         //if the command was the order to quit, print out how many moves we made and stop playing.
         if (user_command == "q") {
-                    cout << movestotal << MOVES_MADE <<endl;
-                    playing = false;
-                    break;
-                }
+            cout << movestotal << MOVES_MADE <<endl;
+            playing = false;
+            break;
+        }
 
         //checking if current move was input properly
         moves = stoi_with_check(user_command);
@@ -336,7 +331,6 @@ void playloop () {
         }
         //if there's an issue with the command, print cannot move and continue
         if (!is_valid_input(sx, sy, dx, dy, board)) {
-            cout << "Got to is_valid_input call and input wasn't valid."<< endl;
             cout << INVALID_POINT << endl;
             continue;
         }
@@ -345,12 +339,11 @@ void playloop () {
         else if (is_valid_move(sx, sy, dx, dy, board)) {
 
             move_piece(sx, sy, dx, dy, board);
-            movestotal = movestotal +1;
+            movestotal++;
             print(board);
             continue;
         }
         else {
-            cout << "Got to line 353 and said cannot move"<< endl;
             cout << CANNOT_MOVE << endl;
             continue;
         }
