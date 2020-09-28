@@ -140,7 +140,7 @@ bool horizontal_movement_check(int sx, int dx, int sy, const vector<vector<Slot_
     //else if we're moving to the right, check if we run into something that's not EMPTY
     else if (sx < dx) {
         for (int i = sx+1; i < dx; ++i) {
-            if (board[i][sy] != EMPTY ) {
+            if (board[sy][i] != EMPTY ) {
                 cout << "board at[i][sy] had this: " << board[i][sy] << "instead of empty" << endl;
                 cout << "i and sy were" << i << " "  << sy << endl;
                 cout << "Returned false from line 144 from horizontal movement" <<endl;
@@ -153,7 +153,7 @@ bool horizontal_movement_check(int sx, int dx, int sy, const vector<vector<Slot_
     //else if we're moving to the right, check if we run into something that's not EMPTY
     } else if (sx > dx) {
         for (int i = sx-1; i > dx; --i) {
-            if (board[i][sy] != EMPTY) {
+            if (board[sy][i] != EMPTY) {
                 cout << "board at[i][sy] had this: " << board[i][sy] << "instead of empty" << endl;
                 cout << "i and sy were" << i << " "  << sy << endl;
                 cout << "Returned false from line 155 from horizontal movement" <<endl;
@@ -179,31 +179,24 @@ bool vertical_movement_check(int sy, int dy, int sx, const vector<vector<Slot_ty
 
     //if these match, we aren't moving vertically at all
     if (sy == dy ) {
-        cout << "Returned true from line 181 in vertical movement check" << endl;
         return true;
     }
     else if (sy < dy) {
         for (int i = sy+1; i < dy; ++i) {
-            if (board[sx][i] != EMPTY) {
-                cout << "board at[sx][i] had this: " << board[sx][i] << "instead of empty" << endl;
-                cout << "sx and i were" << sx << " "  << i << endl;
-                cout << "Returned false from line 188 from vertical movement" <<endl;
+            if (board[i][sx] != EMPTY) {
                 return false;
             }
         }
-        cout << "Returned true from line 192 from vertical movement" <<endl;
+
         return true;
     }
     else if (sy > dy) {
-        for (int i = sy-1; i >= dy; --i) {
-            if (board[sx][i] != EMPTY) {
-                cout << "board at[sx][i] had this: " << board[sx][i] << "instead of empty" << endl;
-                cout << "sx and i were" << sx << " " << i << endl;
-                cout << "Returned false from line 199 from vertical movement" <<endl;
+        for (int i = sy-1; i > dy; --i) {
+            if (board[i][sx] != EMPTY) {
                 return false;
             }
         }
-        cout << "Returned true from line 198 from vertical movement" <<endl;
+
         return true;
     }
     //again, shouldn't get to here but if we did, something went wrong
@@ -215,11 +208,9 @@ bool vertical_movement_check(int sy, int dy, int sx, const vector<vector<Slot_ty
 
 bool is_valid_move (int sx, int sy, int dx, int dy,
                     const vector<vector<Slot_type>>& board) {
-    cout << "Got to is_valid_move" << endl;
     //if starting x is same as destination x, we can just check if we can move vertically
     if (sx == dx && sx == 1) {
         if (vertical_movement_check(sy, dy, sx, board)) {
-            cout << "Returned true from line 214 from is_valid_move" <<endl;
             return true;
         }
     }
@@ -229,7 +220,6 @@ bool is_valid_move (int sx, int sy, int dx, int dy,
     //if starting y is same as destination y, we can just do a horiztonal movement check
     if (sy == dy) {
         if (horizontal_movement_check(sx, dx, sy, board)) {
-            cout << "Returned true from line 228 from is_valid_move" <<endl;
             return true;
         }
     }
@@ -255,13 +245,15 @@ bool is_valid_move (int sx, int sy, int dx, int dy,
 bool is_valid_input (int sx, int sy, int dx, int dy,
                      const vector<vector<Slot_type>>& board) {
 //if the starting position has either a green or a red knob we can proceed
-    if (board[sy][sx] == GREEN || board[sx][sy] == RED) {
+    if (board[sy][sx] == GREEN) {
         //if the destination space is empty, it's a valid move
         if (board[dy][dx] == EMPTY) {
             return true;
-        //else we just return false
-        } else {
-            return false;
+        }
+    }
+    else if (board[sy][sx] == RED){
+        if (board[dy][dx] == EMPTY) {
+            return true;
         }
     }
     return false;
