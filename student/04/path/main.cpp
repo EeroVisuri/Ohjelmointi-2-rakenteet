@@ -124,6 +124,7 @@ void move_piece (int sx, int sy, int dx, int dy, vector<vector<Slot_type>>& boar
     Slot_type prev_slot;
     prev_slot = board.at(sy).at(sx);
     board[dy][dx] = prev_slot;
+    board[sy][sx] = EMPTY;
 
 }
 
@@ -131,28 +132,36 @@ void move_piece (int sx, int sy, int dx, int dy, vector<vector<Slot_type>>& boar
 bool horizontal_movement_check(int sx, int dx, int sy, const vector<vector<Slot_type>>& board) {
 
     //Check if there's a knob in the way in a horizontal path
-    cout << "Got to horizontal_movement_check before crashing";
     //if we're just moving vertically we can just return true
     if (sx == dx) {
+        cout << "returned true from horizontal_movement" <<endl;
         return true;
     }
     //else if we're moving to the right, check if we run into something that's not EMPTY
     else if (sx < dx) {
-        for (int i = sx+1; i <= dx; ++i) {
+        for (int i = sx+1; i < dx; ++i) {
             if (board[i][sy] != EMPTY ) {
+                cout << "board at[i][sy] had this: " << board[i][sy] << "instead of empty" << endl;
+                cout << "i and sy were" << i << " "  << sy << endl;
+                cout << "Returned false from line 144 from horizontal movement" <<endl;
                 return false;
             }
         }
         //if we didn't, we can return true once we reach destination
+        cout << "Returned true from line 149 from horizontal movement" <<endl;
         return true;
     //else if we're moving to the right, check if we run into something that's not EMPTY
     } else if (sx > dx) {
-        for (int i = sx-1; i >= dx; --i) {
+        for (int i = sx-1; i > dx; --i) {
             if (board[i][sy] != EMPTY) {
+                cout << "board at[i][sy] had this: " << board[i][sy] << "instead of empty" << endl;
+                cout << "i and sy were" << i << " "  << sy << endl;
+                cout << "Returned false from line 155 from horizontal movement" <<endl;
                 return false;
             }
         }
         //again, we can return true once we reach destination
+        cout << "Returned true from line 160 from horizontal movement" <<endl;
         return true;
     }
     //shouldn't get to this point but if we did something clearly went wrong.
@@ -168,25 +177,33 @@ bool vertical_movement_check(int sy, int dy, int sx, const vector<vector<Slot_ty
 
 
 
-    cout << "Got to vertical_movement_check before crashing";
     //if these match, we aren't moving vertically at all
     if (sy == dy ) {
+        cout << "Returned true from line 181 in vertical movement check" << endl;
         return true;
     }
     else if (sy < dy) {
-        for (int i = sy+1; i <= dy; ++i) {
+        for (int i = sy+1; i < dy; ++i) {
             if (board[sx][i] != EMPTY) {
+                cout << "board at[sx][i] had this: " << board[sx][i] << "instead of empty" << endl;
+                cout << "sx and i were" << sx << " "  << i << endl;
+                cout << "Returned false from line 188 from vertical movement" <<endl;
                 return false;
             }
         }
+        cout << "Returned true from line 192 from vertical movement" <<endl;
         return true;
     }
     else if (sy > dy) {
-        for (int i = sy-1; i <= dy; --i) {
+        for (int i = sy-1; i >= dy; --i) {
             if (board[sx][i] != EMPTY) {
+                cout << "board at[sx][i] had this: " << board[sx][i] << "instead of empty" << endl;
+                cout << "sx and i were" << sx << " " << i << endl;
+                cout << "Returned false from line 199 from vertical movement" <<endl;
                 return false;
             }
         }
+        cout << "Returned true from line 198 from vertical movement" <<endl;
         return true;
     }
     //again, shouldn't get to here but if we did, something went wrong
@@ -199,20 +216,34 @@ bool vertical_movement_check(int sy, int dy, int sx, const vector<vector<Slot_ty
 bool is_valid_move (int sx, int sy, int dx, int dy,
                     const vector<vector<Slot_type>>& board) {
     cout << "Got to is_valid_move" << endl;
-    if (sx == dx) {
+    //if starting x is same as destination x, we can just check if we can move vertically
+    if (sx == dx && sx == 1) {
         if (vertical_movement_check(sy, dy, sx, board)) {
+            cout << "Returned true from line 214 from is_valid_move" <<endl;
             return true;
-        }
-        else {
-            return false;
         }
     }
 
-    if (dx < dy || dx > dy) {
-        if (condition) {
 
+
+    //if starting y is same as destination y, we can just do a horiztonal movement check
+    if (sy == dy) {
+        if (horizontal_movement_check(sx, dx, sy, board)) {
+            cout << "Returned true from line 228 from is_valid_move" <<endl;
+            return true;
         }
-
+    }
+    else
+        if (horizontal_movement_check(sx, 1, sy, board)) {
+            if(vertical_movement_check(sy, dy, 1, board)) {
+                if (horizontal_movement_check(1, dx, dy, board)) {
+                    cout << "Returned true from line 241 from is_valid_move" <<endl;
+                    return true;
+                }
+            }
+        }
+    cout << "Returned false from is_valid move'ss end" <<endl;
+    return false;
 }
 
 
@@ -223,15 +254,9 @@ bool is_valid_move (int sx, int sy, int dx, int dy,
 //this function checks if pieces are in correct
 bool is_valid_input (int sx, int sy, int dx, int dy,
                      const vector<vector<Slot_type>>& board) {
-    cout << "Cout from is_valid_input, sx was" << sx <<endl;
-    cout << "sy was: " << sy << endl;
-    cout << "dx was: " << dx << endl;
-    cout << "dy was: " << dy << endl;
-
-
 //if the starting position has either a green or a red knob we can proceed
     if (board[sy][sx] == GREEN || board[sx][sy] == RED) {
-        //if the destination space is unused, it's a valid move
+        //if the destination space is empty, it's a valid move
         if (board[dy][dx] == EMPTY) {
             return true;
         //else we just return false
@@ -319,7 +344,7 @@ void playloop () {
         }
         //if there's an issue with the command, print cannot move and continue
         if (!is_valid_input(sx, sy, dx, dy, board)) {
-            cout << "Got to line 278 and input wasn't valid."<< endl;
+            cout << "Got to is_valid_input call and input wasn't valid."<< endl;
             cout << INVALID_POINT << endl;
             continue;
         }
@@ -333,7 +358,7 @@ void playloop () {
             continue;
         }
         else {
-            cout << "Got to line 286 and said cannot move"<< endl;
+            cout << "Got to line 353 and said cannot move"<< endl;
             cout << CANNOT_MOVE << endl;
             continue;
         }
