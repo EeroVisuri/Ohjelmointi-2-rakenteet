@@ -27,7 +27,25 @@ using namespace std;
  * Feedback language (fi/en): fi
  *
  * Notes about the program and it's implementation:
- * nothing yet
+ *
+ * Game runs in a playing loop, at the start of the loop there's a check
+ * if the game has been won. If it hasn't, the game prints out request for
+ * moves.
+ *
+ * Then when moving the program checks if the move you're about to make makes
+ * sense, that the starting coordinates marked with s(tart)x and s(tart)y contain
+ * a knob of either colour and d(estination) x and d(estination) y contain
+ * an empty square.
+ *
+ * Then the program runs checks on vertical and horizontal movement based on
+ * where your initial coordinates were, then if all those checks return true
+ * it will move the knob to destination coordinates.
+ *
+ * I would have preferred to use classes for a lot of these, but since
+ * briefing said "This assignment has only one code file." I created
+ * functions for everything related to game logic. Difficult task, finished
+ * barely hours before deadline but I learned a lot.
+ *
  * */
 
 
@@ -110,6 +128,7 @@ bool game_over(const vector<vector<Slot_type>>& board) {
         if (board[4][0] == GREEN &&board[4][1] == GREEN &&board[4][2] == GREEN
                 &&board[4][3] == GREEN) {
             return true;
+
         }
     }
     return false;
@@ -277,8 +296,13 @@ void playloop () {
     print(board);
 
     while (playing) {
-
-
+        //start of the loop we check if game's over.
+        //check if game ended
+        if (game_over(board)) {
+            cout << GAME_OVER <<endl;
+            playing = false;
+            break;
+        }
 
 
 
@@ -291,13 +315,9 @@ void playloop () {
         int sy;
         int dx;
         int dy;
-        //check if game ended
-        if (game_over(board)) {
-            cout << GAME_OVER <<endl;
-            playing = false;
-        }
 
-        //grabbing command from user
+
+        //Asking input from player.
         cout << INPUT_TEXT;
 
         std::getline(std::cin, user_command);
