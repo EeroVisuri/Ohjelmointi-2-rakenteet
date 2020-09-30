@@ -50,5 +50,5 @@ int main()
         file_object_for_output.close();
 
     }
-    return 1;
+    return 0;
 }
