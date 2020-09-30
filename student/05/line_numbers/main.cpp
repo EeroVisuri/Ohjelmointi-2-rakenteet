@@ -27,7 +27,7 @@ int main()
     ifstream file_object(inputfile);
 
 
-    //ofstream file_object(outputfile);
+    ofstream file_object_for_output(outputfile);
 
 
     //if we can't read from inputfile, print out an error
@@ -35,13 +35,8 @@ int main()
         cout << "Error! The file " << inputfile << " cannot be opened." << endl;
         return EXIT_FAILURE;
     }
-
-
-
-
-    //Else while the file has lines, we read those lines and put them in a variable
     else {
-        ofstream file_object_for_output;
+
         string line;
         int linenumber = 1;
         file_object.open(inputfile);
