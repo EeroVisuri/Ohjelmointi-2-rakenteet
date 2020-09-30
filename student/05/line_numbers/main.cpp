@@ -31,7 +31,7 @@ int main()
 
 
     //if we can't read from inputfile, print out an error
-    if (!file_object) {
+    if (not file_object) {
         cout << "Error! The file " << inputfile << " cannot be opened." << endl;
         return EXIT_FAILURE;
     }
@@ -50,5 +50,5 @@ int main()
         file_object_for_output.close();
 
     }
-
+    return 1;
 }
