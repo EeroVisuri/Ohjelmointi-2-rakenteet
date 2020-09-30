@@ -24,10 +24,10 @@ int main()
 
     //Creating the file_object stream to read from the file with given name
 
-    ifstream file_object(inputfile);
+    ifstream file_object;
 
 
-    ofstream file_object_for_output(outputfile);
+    ofstream file_object_for_output;
 
 
     //if we can't read from inputfile, print out an error
