@@ -48,7 +48,6 @@ int main()
         //close the file_objects after the file runs out of lines
         file_object.close();
         file_object_for_output.close();
-        exit(1);
 
     }
 
