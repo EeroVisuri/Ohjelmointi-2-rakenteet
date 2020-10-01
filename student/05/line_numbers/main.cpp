@@ -22,34 +22,22 @@ int main() {
     cout << "Output file: ";
     getline(cin, outputfile);
 
-    //Creating the file_object stream to read from the file with given name
 
-    ifstream file_object;
-    ofstream file_object_for_output;
+    ifstream readstream(inputfile);
 
-    //ofstream file_object(outputfile);
-
-
-    //if we can't read from inputfile, print out an error
-    if (!file_object) {
+    if (not readstream) {
         cout << "Error! The file " << inputfile << " cannot be opened." << endl;
-        return EXIT_FAILURE;
     }
-    //Else while the file has lines, we read those lines and put them in a variable
     else {
-        string line;
+        ofstream writestream(outputfile);
         int linenumber = 1;
-        file_object.open(inputfile);
-        file_object_for_output.open(outputfile);
-        while (std::getline(file_object, line)) {
-            file_object_for_output << linenumber << " " << line <<endl;
+        string line;
+        while (getline(readstream, line)) {
+            writestream << linenumber << " " << line << endl;
             linenumber++;
+
         }
-        //close the file_objects after the file runs out of lines
-        file_object.close();
-        file_object_for_output.close();
-
-
-        cout << "End of program, linenumber was: " << linenumber << endl;
+        writestream.close();
     }
+    readstream.close();
 }
