@@ -24,8 +24,23 @@ int main()
         // TODO: implement your solution
 
 
+        std::string mixed_word = "";
+        std::string first_letter = "";
+        std::string last_letter = "";
+        if (word.size() > 2) {
+            copy(word.begin(), word.end(), mixed_word.begin());
+            first_letter = word.front();
+            last_letter = word.back();
+            mixed_word = mixed_word.substr(0, mixed_word.size()-2);
+            shuffle(mixed_word.begin(), mixed_word.end(), generator);
+            mixed_word.insert(0, first_letter);
+            mixed_word.append(last_letter);
+            copy(mixed_word.begin(), mixed_word.end(), word.begin());
+        }
 
-        shuffle(word.begin(), word.end(), generator);
+
+
+
 
 
         std::cout << word << std::endl;
