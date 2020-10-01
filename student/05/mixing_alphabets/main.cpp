@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <random>
 
-
 int main()
 {
     // This is a random number generator that should be given as parameter to the
@@ -13,7 +12,6 @@ int main()
     std::cout << "Enter some text. Quit by entering the word \"END\"." << std::endl;
     std::string word;
 
-
     while (std::cin >> word)
     {
         if (word == "END")
@@ -21,26 +19,11 @@ int main()
             return EXIT_SUCCESS;
         }
 
-        // TODO: implement your solution
+        // TODO: implement your solution here
 
-
-        std::string mixed_word = "";
-        std::string first_letter = "";
-        std::string last_letter = "";
-        if (word.size() > 2) {
-            copy(word.begin(), word.end(), mixed_word.begin());
-            first_letter = word.front();
-            last_letter = word.back();
-            mixed_word = mixed_word.substr(0, mixed_word.size()-2);
-            shuffle(mixed_word.begin(), mixed_word.end(), generator);
-            mixed_word.insert(0, first_letter);
-            mixed_word.append(last_letter);
-            copy(mixed_word.begin(), mixed_word.end(), word.begin());
+        if (word.length() > 2) {
+            shuffle(word.begin()+1, word.end()-1, generator);
         }
-
-
-
-
 
 
         std::cout << word << std::endl;
