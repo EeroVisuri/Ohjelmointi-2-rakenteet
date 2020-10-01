@@ -2,7 +2,7 @@
 #include <string>
 #include <algorithm>
 #include <random>
-#include <vector>
+
 
 int main()
 {
@@ -25,11 +25,9 @@ int main()
 
 
 
-        std::vector<char> mixed_word(word.length());
-        copy(word.begin(), word.end(), mixed_word.begin());
-        shuffle(mixed_word.begin(), mixed_word.end(), generator);
-        copy(mixed_word.begin(), mixed_word.end(), word.begin());
-	
+        shuffle(word.begin(), word.end(), generator);
+
+
         std::cout << word << std::endl;
     }
 }
