@@ -27,6 +27,7 @@ int main() {
 
     if (not readstream) {
         cout << "Error! The file " << inputfile << " cannot be opened." << endl;
+        return EXIT_FAILURE;
     }
     else {
         ofstream writestream(outputfile);
