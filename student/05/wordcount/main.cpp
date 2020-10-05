@@ -13,7 +13,7 @@ class WordObject  {
 public:
     string name;
     int times_found_in_text = 0;
-    vector<int> text_lines_object_found_in;
+    set<int> text_lines_object_found_in;
     string information_in_stringform;
     string get_lines_as_string () {
         stringstream ss;
@@ -61,7 +61,7 @@ int main()
                 WordObject Wordobj;
                 Wordobj.name = word;
                 Wordobj.times_found_in_text = 1;
-                Wordobj.text_lines_object_found_in.push_back(linenumber);
+                Wordobj.text_lines_object_found_in.insert(linenumber);
                 Wordsmap.insert({word, Wordobj});
                 instream.clear();
             }
@@ -69,7 +69,7 @@ int main()
             //save the linenumber in the WordObject's vector of numbers.
             else if (Wordsmap.find(word) != Wordsmap.end()) {
                 Wordsmap.at(word).times_found_in_text++;
-                Wordsmap.at(word).text_lines_object_found_in.push_back(linenumber);
+                Wordsmap.at(word).text_lines_object_found_in.insert(linenumber);
 
             }
             else {
