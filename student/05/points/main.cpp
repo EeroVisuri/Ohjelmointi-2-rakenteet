@@ -33,20 +33,25 @@ int main() {
     while (getline(input_file, line)) {
         //grabbing the name
         string name = line.substr(0, line.find(':'));
-        //grabbing the score and converting it to integer
-        char score_as_char = line.back();
-        int score_to_add = (int) score_as_char;
+        //grabbing the score
+        int score_to_add = stoi(line.substr(line.find(':' ) +1));
+        //if name exist on the list, we just add additional scores to it
         if (scores.find(name) != scores.end()) {
-
-            //this could be prettier check out if there's a way to do score = score + score_to_add.
-            for (int i = 0; i < score_to_add; ++i) {
-                scores[name]++;
-            }
+            scores[name]+=score_to_add;
         }
+        //if name doesn't exist on a list, we can add a new name with initial score.
         else {
-            scores.insert(pair <string, int>("name", score_to_add));
+            scores.insert(pair <string, int>(name, score_to_add));
         }
 
+    }
+
+    cout << "Final scores: " << endl;
+    map <string, int>::iterator iter;
+    iter = scores.begin();
+    while (iter != scores.end()) {
+        cout << iter->first << ": " << iter->second << endl;
+        ++iter;
     }
 
 
