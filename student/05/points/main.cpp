@@ -13,7 +13,7 @@ int main() {
 
     string filename = "";
 
-    cout << "Input file: " << endl;
+    cout << "Input file: ";
     getline(cin, filename);
 
     ifstream input_file(filename);
