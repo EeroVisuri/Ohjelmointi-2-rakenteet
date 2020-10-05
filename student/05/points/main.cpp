@@ -53,6 +53,7 @@ int main() {
         cout << iter->first << ": " << iter->second << endl;
         ++iter;
     }
+    return EXIT_SUCCESS;
 
 
     //todo print out final scores for each player organized alphabetically by playernames
