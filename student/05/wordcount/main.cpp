@@ -85,6 +85,7 @@ int main()
         cout <<iter->second.get_lines_as_string() << endl;
         ++iter;
     }
+    return EXIT_SUCCESS;
 
 
 
