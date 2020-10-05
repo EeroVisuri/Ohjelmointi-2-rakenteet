@@ -19,7 +19,7 @@ int main() {
     ifstream input_file(filename);
     //check if something went wrong and toss an exit failure if so
     if (not input_file) {
-        cout << "Error! The file <" << filename << "> cannot be opened." << endl;
+        cout << "Error! The file " << filename << " cannot be opened." << endl;
         return EXIT_FAILURE;
     }
 
