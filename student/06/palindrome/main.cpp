@@ -15,6 +15,11 @@ bool palindrome_recursive(std::string s)
           int start = 0;
           int end = s.length()-1;
 
+          //special case check for 2 character words with same characters. Those count as palindromes.
+          if (s.length() == 2 && s.at(start) == s.at(end)) {
+              return true;
+          }
+
           //if we've gone through entire word, it's a palindrome
           if (start == end) {
               return true;
