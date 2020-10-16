@@ -15,13 +15,15 @@ bool palindrome_recursive(std::string s)
           int start = 0;
           int end = s.length()-1;
 
-
+          //if we've gone through entire word, it's a palindrome
           if (start == end) {
               return true;
           }
+          //if starting and ending letters don't match, it's not a palindrome, returnn false
           else if (s.at(start) != s.at(end)) {
               return false;
           }
+          //else we cut first and last letters out of the string, then pass it to this function again.
           else {
               s = s.substr(1, s.size()-2);
               return palindrome_recursive(s);
