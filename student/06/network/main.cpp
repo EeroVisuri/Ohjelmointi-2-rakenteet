@@ -5,6 +5,7 @@
 #include <queue>
 #include <map>
 #include <iterator>
+#include <set>
 
 const std::string HELP_TEXT = "S = store id1 i2\nP = print id\n"
                               "C = count id\nD = depth id\n";
@@ -31,14 +32,45 @@ std::vector<std::string> split(const std::string& s, const char delimiter, bool 
 }
 
 
+void recursive_printing(std::string id, std::multimap<std::string, std::string> marketerMap) {
 
+
+    int index = 1;
+    std::string recruiter = id;
+    std::string recruited;
+    if (marketerMap.find(id) != marketerMap.end()) {
+        for (std::multimap<std::string, std::string>::iterator it = marketerMap.find(id);
+             it != marketerMap.end(); it++) {
+            index = index + std::distance(marketerMap.begin(), it);
+
+            recruited = it->second;
+
+            std::cout << std::string(index, '.') << it->second << std::endl;
+            index = 1;
+            return recursive_printing(recruited, marketerMap);
+        }
+    }
+    else if (marketerMap.find(recruited) != marketerMap.end()) {
+        for (std::multimap<std::string, std::string>::iterator it2 = marketerMap.find(recruited);
+             it2 != marketerMap.end(); it2++) {
+            index = index + std::distance(marketerMap.begin(), it2);
+            recruited = it2 -> second;
+            std::cout << std::string(index, '.') << it2->second << std::endl;
+            return recursive_printing(recruited, marketerMap);
+        }
+    }
+    else {
+        index = 1;
+        return recursive_printing(recruiter, marketerMap);
+    }
+}
 
 
 
 int main() {
     // TODO: Implement the datastructure here
+    std::multimap<std::string, std::string> marketerMap;
 
-    std::map<std::string, std::vector<std::string>> Marketer_map;
 
 
     while(true){
@@ -58,10 +90,13 @@ int main() {
             std::string id2 = parts.at(2);
 
             // TODO: Implement the command here!
-            if (Marketer_map.find(id1) == Marketer_map.end()) {
-                Marketer_map[id1].push_back(id2);
-
+            if (marketerMap.find(id1) == marketerMap.end()) {
+                marketerMap.insert(std::pair<std::string, std::string>(id1, id2));
             }
+            else if (marketerMap.find(id1) != marketerMap.end()) {
+                marketerMap.insert(std::pair<std::string, std::string>(id1, id2));
+            }
+
         } else if(command == "P" or command == "p"){
             if(parts.size() != 2){
                 std::cout << "Erroneous parameters!" << std::endl << HELP_TEXT;
@@ -70,14 +105,8 @@ int main() {
             std::string id = parts.at(1);
 
             // TODO: Implement the command here!
-            int depth = 2;
-            std::map<std::string, std::vector<std::string>>::iterator itr = Marketer_map.find(id);
             std::cout << id << std::endl;
-            for (itr = Marketer_map.find(id) ; itr != Marketer_map.end() ; itr++ ) {
-                std::cout << std::string(depth, '.') << &itr->second << std::endl;
-                depth++;
-            }
-
+            recursive_printing(id, marketerMap);
 
 
 
