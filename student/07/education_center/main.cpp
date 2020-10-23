@@ -181,6 +181,32 @@ void print_locations (map<string, Course> &courses_map) {
 };
 
 
+//this does not work yet, pls fix
+void print_location_and_themes (map<string, Course> &courses_map, string location, string theme) {
+    //a vector of strings to store our locations
+    map<string, int> locations_and_themes;
+    //saving the locations to the vector from courses_map.
+    for (map<string, Course>::iterator it = courses_map.begin();
+         it != courses_map.end() ; ++it) {
+        if (it->first == location) {
+            if (it->second.theme == theme) {
+                pair<string, int> loc_enrollments(it->first, it->second.enrollments);
+
+            }
+        }
+
+    }
+    //printing out the locations in the map.
+    //This size turns out to be 0 hmm.
+    cout << "Size of locations_and_themes is " << locations_and_themes.size() << endl;
+    for(map<string, int>::const_iterator it2 = locations_and_themes.begin();
+        it2 != locations_and_themes.end(); ++it2) {
+        std::cout << it2->first << " " << "---" << it2->second << " enrollments " << "\n";
+    }
+};
+
+
+
 //loop that has while-running inside it, so basically the program runs here after it's been called from main
 
 bool running_loop() {
@@ -241,7 +267,8 @@ bool running_loop() {
         //arranged alphabetically by course name
         if (command_parts[0] == COURSES) {
 
-            cout << "You hit courses!";
+            print_location_and_themes(courses_map, command_parts[1], command_parts[2]);
+            continue;
 
         }
 
