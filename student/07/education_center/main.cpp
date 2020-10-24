@@ -44,16 +44,15 @@ struct Course {
 };
 
 
-//function to load data from a file
-//TODO check that number of fields = 4 it not
-/* If the input file can be opened but the file does not correspond to the definition,
- * for example, the number of fields is not four or one field is missing a value,
- * the program prints the error message Error: empty field to the user
- * and terminates with the return value EXIT_FAILURE as follows:
- */
 
 
+//forward declaration so read_file function can use the error checking.
 bool errorchecking(string line);
+
+
+
+
+//function to split strings by a delimiter char. returns the split string as a vector<string>
 
 vector<string> split(const string& s, const char delimiter, bool ignore_empty = false){
     vector<string> result;
@@ -74,6 +73,19 @@ vector<string> split(const string& s, const char delimiter, bool ignore_empty = 
     }
     return result;
 }
+
+//function to load data from a file
+
+/* If the input file can be opened but the file does not correspond to the definition,
+ * for example, the number of fields is not four or one field is missing a value,
+ * the program prints the error message Error: empty field to the user
+ * and terminates with the return value EXIT_FAILUR
+ *
+ * Otherwise returns "true" on read success.
+ */
+
+
+
 
 bool read_file_to_struct (string filename, map<string, Course> &courses_map) {
     ifstream filereader;
@@ -119,17 +131,22 @@ bool read_file_to_struct (string filename, map<string, Course> &courses_map) {
 };
 
 
-//function for splitting a string
 
 
 
+/*
+ * A function for error-checking the lines from a file.
+ * Takes the string read from the file as a parameter.
+ * Line must consist of four fields, none of them can be empty
+ * or filled with only white spaces
+ * last field must be a positive integer or the word "full"
+ * Returns true if fields are fine, otherwise returns false.
+ */
 
 
 bool errorchecking (string line) {
-    //todo check number of fields = 4 and where <number_of_enrollments> can be a positive integer
-    //or a literal string "full". A course becomes full, if there 50 enrollments in it.
-    //You can assume that <location> consists only of one word.
-    //Instead, <theme and <course_name> may consist of several words.
+
+
 
     //splitting the line into a vector for error checking.
     vector<string>lineparts = split(line, ';');
@@ -149,12 +166,15 @@ bool errorchecking (string line) {
             return false;
         }
     }
-
+    //
     if (lineparts[3] != "full") {
         string last =(lineparts[3]);
         if (isdigit(last.back())) {
-            cout << "Was digit! Digit: " << last.back() << endl;
-            return true;
+            if (last.back() > 0) {
+                cout << "Was digit! Digit: " << last.back() << endl;
+                return true;
+            }
+
         }
         else {
             return false;
@@ -164,6 +184,16 @@ bool errorchecking (string line) {
 
     return true;
 }
+
+/*
+ * Function for printing locations stored in the data structure.
+ * Takes the map where courses data is stored as parameter reference
+ * Puts the locations found of the map to a vector and then prints out
+ * the vector.
+ *
+ */
+
+
 
 void print_locations (map<string, Course> &courses_map) {
     //a vector of strings to store our locations
@@ -189,8 +219,11 @@ void print_location_and_themes (map<string, Course> &courses_map, string locatio
     for (map<string, Course>::iterator it = courses_map.begin();
          it != courses_map.end() ; ++it) {
         if (it->first == location) {
+            cout << it->first << " <- this is it->first" << endl;
             if (it->second.theme == theme) {
+                cout << "This is it-> second" << it->second.theme <<endl;
                 pair<string, int> loc_enrollments(it->first, it->second.enrollments);
+                locations_and_themes.insert(loc_enrollments);
 
             }
         }
@@ -201,7 +234,12 @@ void print_location_and_themes (map<string, Course> &courses_map, string locatio
     cout << "Size of locations_and_themes is " << locations_and_themes.size() << endl;
     for(map<string, int>::const_iterator it2 = locations_and_themes.begin();
         it2 != locations_and_themes.end(); ++it2) {
-        std::cout << it2->first << " " << "---" << it2->second << " enrollments " << "\n";
+        if (it2->second == 50) {
+            cout << it2->first << " " << "--- " << "full" << "\n";
+        }
+        else {
+            cout << it2->first << " " << "--- " << it2->second << " enrollments " << "\n";
+        }
     }
 };
 
