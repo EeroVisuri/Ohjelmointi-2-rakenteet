@@ -21,8 +21,8 @@ using namespace std;
 
 const string UNKNOWN_COMMAND = "Error: Unknown command: ";
 const string ERROR_IN_COMMAND = "Error: error in command ";
-const string ERROR_LOCATION = "Error: unknown location name";
-const string ERROR_THEME = "Error: unknown theme";
+const string ERROR_LOCATION = "Error: unknown location name ";
+const string ERROR_THEME = "Error: unknown theme ";
 
 const string WAITING_INPUT = "> ";
 
@@ -216,12 +216,19 @@ void print_location_and_themes (multimap<string, Course> &courses_map, string lo
     //a vector of strings to store our locations
     map<string, int> names_and_enrollments;
     //saving the locations to the vector from courses_map.
+
+
+    //a for-loop for going through the courses_map, if we find a location matching the parameter,
+    //we move onto next part
     for (const auto& elem: courses_map) {
         if (elem.first != location) {
             continue;
         }
+
+        //here we check if the courses in location match the theme given in parameter
         if (elem.second.theme == theme) {
             cout << "Got to here in iterator yay" <<endl;
+            //if yes, we put course name and number of enrollments into the map we created earlier
             pair<string, int> name_enrollments_pair (elem.second.name, elem.second.enrollments);
             names_and_enrollments.insert(name_enrollments_pair);
         }
@@ -229,7 +236,7 @@ void print_location_and_themes (multimap<string, Course> &courses_map, string lo
 
     }
     //printing out the locations in the map.
-    //This size turns out to be 0 hmm.
+    //debug print remove when done
     cout << "Size of locations_and_themes is " << names_and_enrollments.size() << endl;
     for(map<string, int>::const_iterator it2 = names_and_enrollments.begin();
         it2 != names_and_enrollments.end(); ++it2) {
@@ -295,6 +302,10 @@ bool running_loop() {
             continue;
         }
 
+        if (user_command.back() == '"') {
+            //special case of 2 theme being 2 words OR ONE thx specs.
+        }
+
         vector<string> command_parts = split(user_command, ' ');
 
 
@@ -302,11 +313,38 @@ bool running_loop() {
 
         //Prints out command_parts[1] as location and command_parts[2] as theme
         //arranged alphabetically by course name
+
+        //DOES NOT WORK YET FOR COURSES WHERE THEME IS MULTIPLE WORDS.
+
         if (command_parts[0] == COURSES) {
+            bool noerrors = false;
+            cout << command_parts.size() << " <- command parts size" <<endl;
 
-            print_location_and_themes(courses_map, command_parts[1], command_parts[2]);
-            continue;
+            if (command_parts.size() != 3) {
+                cout << ERROR_IN_COMMAND << command_parts[0] <<endl;
+                continue;
+            }
 
+            if (!courses_map.count(command_parts[1])) {
+                cout << ERROR_LOCATION << command_parts[1] << endl;
+                continue;
+            }
+
+            for (multimap<string, Course>::iterator it = courses_map.begin();
+                 it != courses_map.end(); it++ ) {
+                if (it->second.theme == command_parts[2]) {
+                    noerrors = true;
+                }
+
+
+            }
+            if (noerrors == true) {
+                print_location_and_themes(courses_map, command_parts[1], command_parts[2]);
+            }
+            else {
+                cout << ERROR_THEME << command_parts[2] << endl;
+                continue;
+            }
         }
 
         //prints out all courses that are not full
