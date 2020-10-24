@@ -315,7 +315,7 @@ bool running_loop() {
         //arranged alphabetically by course name
 
         //DOES NOT WORK YET FOR COURSES WHERE THEME IS MULTIPLE WORDS.
-
+        //also maybe put this error checking somewhere else?
         if (command_parts[0] == COURSES) {
             bool noerrors = false;
             cout << command_parts.size() << " <- command parts size" <<endl;
@@ -340,6 +340,7 @@ bool running_loop() {
             }
             if (noerrors == true) {
                 print_location_and_themes(courses_map, command_parts[1], command_parts[2]);
+                continue;
             }
             else {
                 cout << ERROR_THEME << command_parts[2] << endl;
