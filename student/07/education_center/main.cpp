@@ -5,6 +5,7 @@
 #include <sstream>
 #include <map>
 
+
 using namespace std;
 
 
@@ -87,16 +88,15 @@ vector<string> split(const string& s, const char delimiter, bool ignore_empty = 
 
 
 
-bool read_file_to_struct (string filename, map<string, Course> &courses_map) {
+bool read_file_to_struct (string filename, multimap<string, Course> &courses_map) {
     ifstream filereader;
     filereader.open(filename);
     if (not filereader) {
         cout << "Error: the input file cannot be opened" << endl;
         return false;
     }
-    //todo read course info, check that abovementioned error correction is in place
+
     string line;
-    istringstream instream(line);
     while (getline(filereader, line)) {
         if (!line.empty()) {
             //save info into map of structs
@@ -195,11 +195,11 @@ bool errorchecking (string line) {
 
 
 
-void print_locations (map<string, Course> &courses_map) {
+void print_locations (multimap<string, Course> &courses_map) {
     //a vector of strings to store our locations
     vector<string> locations;
     //saving the locations to the vector from courses_map.
-    for (map<string, Course>::iterator it = courses_map.begin();
+    for (multimap<string, Course>::iterator it = courses_map.begin();
          it != courses_map.end() ; ++it) {
         locations.push_back(it->first);
 
@@ -211,29 +211,28 @@ void print_locations (map<string, Course> &courses_map) {
 };
 
 
-//this does not work yet, pls fix
-void print_location_and_themes (map<string, Course> &courses_map, string location, string theme) {
+//this does not work yet if course is in more than one location.
+void print_location_and_themes (multimap<string, Course> &courses_map, string location, string theme) {
     //a vector of strings to store our locations
-    map<string, int> locations_and_themes;
+    map<string, int> names_and_enrollments;
     //saving the locations to the vector from courses_map.
-    for (map<string, Course>::iterator it = courses_map.begin();
-         it != courses_map.end() ; ++it) {
-        if (it->first == location) {
-            cout << it->first << " <- this is it->first" << endl;
-            if (it->second.theme == theme) {
-                cout << "This is it-> second" << it->second.theme <<endl;
-                pair<string, int> loc_enrollments(it->first, it->second.enrollments);
-                locations_and_themes.insert(loc_enrollments);
-
-            }
+    for (const auto& elem: courses_map) {
+        if (elem.first != location) {
+            continue;
         }
+        if (elem.second.theme == theme) {
+            cout << "Got to here in iterator yay" <<endl;
+            pair<string, int> name_enrollments_pair (elem.second.name, elem.second.enrollments);
+            names_and_enrollments.insert(name_enrollments_pair);
+        }
+
 
     }
     //printing out the locations in the map.
     //This size turns out to be 0 hmm.
-    cout << "Size of locations_and_themes is " << locations_and_themes.size() << endl;
-    for(map<string, int>::const_iterator it2 = locations_and_themes.begin();
-        it2 != locations_and_themes.end(); ++it2) {
+    cout << "Size of locations_and_themes is " << names_and_enrollments.size() << endl;
+    for(map<string, int>::const_iterator it2 = names_and_enrollments.begin();
+        it2 != names_and_enrollments.end(); ++it2) {
         if (it2->second == 50) {
             cout << it2->first << " " << "--- " << "full" << "\n";
         }
@@ -254,7 +253,7 @@ bool running_loop() {
     bool running = true;
 
     //creating map where to store our structs
-    map<string, Course> courses_map;
+    multimap<string, Course> courses_map;
 
     //asking user for input file's name
     cout << "Input file: ";
@@ -326,6 +325,15 @@ bool running_loop() {
             cout << "You hit favourite theme!";
 
         }
+
+        //debug command remove from working version
+        if (user_command == "debug") {
+            for (auto x : courses_map) {
+                  cout << x.first << " " << x.second.name << x.second.theme << x.second.enrollments << endl;
+
+            }
+        }
+
         else {
             cout << UNKNOWN_COMMAND << user_command << endl;
 
