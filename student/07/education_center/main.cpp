@@ -489,7 +489,7 @@ bool running_loop() {
             }
 
             if (!courses_map.count(command_parts[1])) {
-                cout << ERROR_LOCATION << command_parts[1] << endl;
+                cout << ERROR_LOCATION << endl;
                 continue;
             }
 
@@ -508,7 +508,7 @@ bool running_loop() {
             }
             //otherwise something has gone wrong.
             else {
-                cout << ERROR_THEME << command_parts[2] << endl;
+                cout << ERROR_THEME << endl;
                 continue;
             }
         }
@@ -530,7 +530,7 @@ bool running_loop() {
                 continue;
             }
             else {
-                cout << ERROR_THEME <<command_parts[1] << endl;
+                cout << ERROR_THEME << endl;
                 continue;
             }
         }
