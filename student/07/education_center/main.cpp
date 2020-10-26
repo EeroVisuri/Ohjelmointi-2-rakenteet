@@ -16,6 +16,12 @@ using namespace std;
  * It puts the data into a multimap of locations and struct Courses which is an object that contains coursedata.
  * A running loop is called from main, where program takes inputs from user and based on the inputs either
  * throws errors or calls functions to perform commands given by the user.
+ * * Program author
+ * Name: Eero Visuri
+ * Student number: 439504
+ * UserID: kneevi
+ * E-Mail: eero.visuri@tuni.fi
+ * Feedback language (fi/en): fi
  *
  */
 
