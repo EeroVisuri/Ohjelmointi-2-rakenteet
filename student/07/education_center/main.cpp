@@ -131,7 +131,7 @@ bool read_file_to_struct (string filename, multimap<string, Course> &courses_map
     string line;
     while (getline(filereader, line)) {
         if (!line.empty()) {
-
+            bool duplicate = false;
             //save info into map of structs
             if (errorchecking(line)) {
                 cout << "Here's line: " << line << endl;
@@ -148,11 +148,14 @@ bool read_file_to_struct (string filename, multimap<string, Course> &courses_map
 
                         if (iter->first == location && iter->second.name == course_name) {
                             iter->second.enrollments = string_to_int(split_line);
+                            duplicate = true;
                             cout << "FOUND COURSE ADDING ENROLLMENTS" << endl;
                         }
 
                     }
-                    create_new_course(courses_map, split_line);
+                    if (!duplicate) {
+                        create_new_course(courses_map, split_line);
+                    }
                 }
                 else if(!errorchecking(line)) {
                     cout << "Error: empty field";
