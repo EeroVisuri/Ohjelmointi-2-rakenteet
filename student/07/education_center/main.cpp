@@ -87,7 +87,6 @@ vector<string> split(const string& s, const char delimiter, bool ignore_empty = 
 
 
 
-
 bool read_file_to_struct (string filename, multimap<string, Course> &courses_map) {
     ifstream filereader;
     filereader.open(filename);
@@ -99,6 +98,7 @@ bool read_file_to_struct (string filename, multimap<string, Course> &courses_map
     string line;
     while (getline(filereader, line)) {
         if (!line.empty()) {
+
             //save info into map of structs
             if (errorchecking(line)) {
                 cout << "Here's line: " << line << endl;
@@ -150,9 +150,6 @@ bool errorchecking (string line) {
 
     //splitting the line into a vector for error checking.
     vector<string>lineparts = split(line, ';');
-    cout << "Line was: " << line << endl;
-    cout << lineparts.size() << " <- lineparts size" << endl;
-    cout << "lineparts were : ";
     for (auto i = lineparts.begin(); i != lineparts.end(); ++i) {
         cout << *i << ' '  << endl;
     }
@@ -171,7 +168,6 @@ bool errorchecking (string line) {
         string last =(lineparts[3]);
         if (isdigit(last.back())) {
             if (last.back() > 0) {
-                cout << "Was digit! Digit: " << last.back() << endl;
                 return true;
             }
 
@@ -179,7 +175,6 @@ bool errorchecking (string line) {
         else {
             return false;
         }
-        cout << "lineparts[3] was full! " << lineparts[3] << endl;
     }
 
     return true;
@@ -227,7 +222,6 @@ void print_location_and_themes (multimap<string, Course> &courses_map, string lo
 
         //here we check if the courses in location match the theme given in parameter
         if (elem.second.theme == theme) {
-            cout << "Got to here in iterator yay" <<endl;
             //if yes, we put course name and number of enrollments into the map we created earlier
             pair<string, int> name_enrollments_pair (elem.second.name, elem.second.enrollments);
             names_and_enrollments.insert(name_enrollments_pair);
@@ -248,6 +242,18 @@ void print_location_and_themes (multimap<string, Course> &courses_map, string lo
         }
     }
 };
+
+
+
+
+void print_available_courses (multimap<string, Course> & courses_map) {
+    for (multimap<string, Course>::iterator it3 = courses_map.begin();
+         it3 != courses_map.end() ; ++it3) {
+        if (!(it3->second.enrollments == 50)) {
+            cout << it3->first << " : " << it3->second.theme << " : " << it3->second.name << endl;
+        }
+    }
+}
 
 
 
@@ -302,9 +308,19 @@ bool running_loop() {
             continue;
         }
 
-        if (user_command.back() == '"') {
-            //special case of 2 theme being 2 words OR ONE thx specs.
+        //prints out all courses that are not full
+        //outputs a single alphabetically ordered list, firstly by location, then theme, then course name
+        if (user_command == AVAILABLE) {
+            print_available_courses(courses_map);
+            continue;
+
         }
+
+
+
+
+
+
 
         vector<string> command_parts = split(user_command, ' ');
 
@@ -313,14 +329,37 @@ bool running_loop() {
 
         //Prints out command_parts[1] as location and command_parts[2] as theme
         //arranged alphabetically by course name
-
-        //DOES NOT WORK YET FOR COURSES WHERE THEME IS MULTIPLE WORDS.
         //also maybe put this error checking somewhere else?
         if (command_parts[0] == COURSES) {
             bool noerrors = false;
             cout << command_parts.size() << " <- command parts size" <<endl;
 
-            if (command_parts.size() != 3) {
+            if (user_command.back() == '"' && command_parts.size() == 4) {
+                cout << "Ollaan iffis";
+                cout << "Command parts size is: " << command_parts.size();
+                //special case of 2 theme being 2 words OR ONE thx specs.
+                string s1 = command_parts[2];
+                string s2 = command_parts[3];
+                string result = s1 + " " + s2;
+                result = result.substr(1, result.size()-2);
+
+                command_parts.pop_back();
+                command_parts.pop_back();
+                command_parts.push_back(result);
+
+
+            }
+            else if (user_command.back() == '"' && command_parts.size() == 3) {
+                string removing_quotes = command_parts[2];
+                cout << "Removing quotes is: " << removing_quotes << endl;
+                removing_quotes = removing_quotes.substr(1, removing_quotes.size()-2);
+                command_parts.pop_back();
+
+                command_parts.push_back(removing_quotes);
+                cout << command_parts[3] << "<- command parts 3" << endl;
+            }
+
+            else if (command_parts.size() != 3) {
                 cout << ERROR_IN_COMMAND << command_parts[0] <<endl;
                 continue;
             }
@@ -348,12 +387,9 @@ bool running_loop() {
             }
         }
 
-        //prints out all courses that are not full
-        //outputs a single alphabetically ordered list, firstly by location, then theme, then course name
-        if (command_parts[0] == AVAILABLE) {
-            cout << "You hit available!";
 
-        }
+
+
         //prints out all the courses with these of command_parts[1]
         if (command_parts[0] == COURSES_IN_THEME) {
             cout << "YOu hit courses in theme!";
