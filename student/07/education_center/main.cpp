@@ -97,7 +97,6 @@ int string_to_int (vector<string> split_line) {
  */
 
 void create_new_course(multimap<string, Course> &courses_map, vector<string>split_line) {
-    cout << "Course is new creating new course" << endl;
     struct Course NewCourse;
     NewCourse.name = split_line[2];
     NewCourse.theme = split_line[1];
@@ -138,7 +137,6 @@ bool read_file_to_struct (string filename, multimap<string, Course> &courses_map
             bool duplicate = false;
             //save info into map of structs
             if (errorchecking(line)) {
-                cout << "Here's line: " << line << endl;
                 vector<string>split_line = split(line, ';');
                 string course_name = split_line[2];
                 string location = split_line[0];
@@ -148,12 +146,11 @@ bool read_file_to_struct (string filename, multimap<string, Course> &courses_map
                 else if (courses_map.size() > 0) {
                     for (multimap<string, Course>::iterator iter = courses_map.begin();
                          iter != courses_map.end() ; ++iter) {
-                        cout << "In for-loop atm" << endl;
+
 
                         if (iter->first == location && iter->second.name == course_name) {
                             iter->second.enrollments = string_to_int(split_line);
                             duplicate = true;
-                            cout << "FOUND COURSE ADDING ENROLLMENTS" << endl;
                         }
 
                     }
@@ -163,12 +160,14 @@ bool read_file_to_struct (string filename, multimap<string, Course> &courses_map
                 }
                 else if(!errorchecking(line)) {
                     cout << "Error: empty field";
+                    filereader.close();
                     return false;
                 }
 
             }
         }
     }
+    filereader.close();
     return true;
 };
 
@@ -192,9 +191,6 @@ bool errorchecking (string line) {
 
     //splitting the line into a vector for error checking.
     vector<string>lineparts = split(line, ';');
-    for (auto i = lineparts.begin(); i != lineparts.end(); ++i) {
-        cout << *i << ' '  << endl;
-    }
     if (lineparts.size() != 4) {
         return false;
     }
@@ -329,6 +325,50 @@ void print_courses_in_theme (multimap<string, Course> & courses_map, string them
 
 };
 
+/* This function takes the courses_map, counts the most popular theme and outputs the theme.
+ *
+ */
+
+void favourite_theme (multimap<string, Course> & courses_map) {
+    map<string, int> most_popular_theme;
+
+    if (courses_map.size() == 0) {
+        cout << "No enrollments" << endl;
+    }
+
+    for (multimap<string, Course>::iterator iter = courses_map.begin();
+         iter != courses_map.end() ; ++iter) {
+        string theme = iter->second.theme;
+
+        if (most_popular_theme.find(theme) == most_popular_theme.end()) {
+            int enrollments = iter->second.enrollments;
+            pair <string, int> tpair (theme, enrollments);
+            most_popular_theme.insert(tpair);
+        }
+        else if (most_popular_theme.find(theme) != most_popular_theme.end()) {
+            int enrollments = iter->second.enrollments;
+            int previous = most_popular_theme.at(theme);
+            int total = enrollments+previous;
+            most_popular_theme.at(theme) = total;
+
+        }
+    }
+        map<string, int>::iterator itr;
+        string highest_theme = "";
+        int highest_enrollment = 0;
+        for ( itr = most_popular_theme.begin(); itr != most_popular_theme.end(); ++itr) {
+            if(itr->second > highest_enrollment) {
+                highest_theme = itr->first;
+                highest_enrollment = itr->second;
+            }
+
+        }
+
+        cout << highest_enrollment << " enrollments in themes" <<endl;
+        cout << "---" << highest_theme << " " << endl;
+
+
+};
 
 
 //loop that has while-running inside it, so basically the program runs here after it's been called from main
@@ -402,8 +442,6 @@ bool running_loop() {
         //special case of 2 theme being 2 words and quotation marks.
         if (command_parts[0] == COURSES) {
             bool noerrors = false;
-            cout << command_parts.size() << " <- command parts size" <<endl;
-
             if (user_command.back() == '"' && command_parts.size() == 4) {
 
                 string s1 = command_parts[2];
@@ -482,17 +520,11 @@ bool running_loop() {
 
         //todo print out the course with most popular theme
         if (user_command == FAV_THEME) {
-            cout << "You hit favourite theme!";
+            favourite_theme(courses_map);
+            continue;
 
         }
 
-        //debug command remove from working version
-        if (user_command == "debug") {
-            for (auto x : courses_map) {
-                cout << x.first << " " << x.second.name << x.second.theme << x.second.enrollments << endl;
-
-            }
-        }
 
         else {
             cout << UNKNOWN_COMMAND << user_command << endl;
