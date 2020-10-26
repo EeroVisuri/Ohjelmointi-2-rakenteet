@@ -4,16 +4,19 @@
 #include <vector>
 #include <sstream>
 #include <map>
-
+#include <set>
+#include <algorithm>
 
 using namespace std;
 
 
 
 /*
+ * Program reads data from a txt-file in format of: <location>;<theme>;<course_name>;<number_of_enrollments>
+ * It puts the data into a multimap of locations and struct Courses which is an object that contains coursedata.
+ * A running loop is called from main, where program takes inputs from user and based on the inputs either
+ * throws errors or calls functions to perform commands given by the user.
  *
- * Muista header-comment
- * <location>;<theme>;<course_name>;<number_of_enrollments> dataformaatti
  */
 
 
@@ -76,6 +79,7 @@ vector<string> split(const string& s, const char delimiter, bool ignore_empty = 
 };
 
 
+//simple string to integer-function.
 
 
 int string_to_int (vector<string> split_line) {
@@ -230,12 +234,11 @@ bool errorchecking (string line) {
 
 void print_locations (multimap<string, Course> &courses_map) {
     //a vector of strings to store our locations
-    vector<string> locations;
+    set<string> locations;
     //saving the locations to the vector from courses_map.
     for (multimap<string, Course>::iterator it = courses_map.begin();
          it != courses_map.end() ; ++it) {
-        locations.push_back(it->first);
-
+        locations.insert(it->first);
     }
     //printing out the locations in the map.
     for (auto i = locations.begin(); i != locations.end(); ++i) {
@@ -244,7 +247,7 @@ void print_locations (multimap<string, Course> &courses_map) {
 };
 
 
-//this does not work yet if course is in more than one location.
+
 void print_location_and_themes (multimap<string, Course> &courses_map, string location, string theme) {
     //a vector of strings to store our locations
     map<string, int> names_and_enrollments;
@@ -268,8 +271,6 @@ void print_location_and_themes (multimap<string, Course> &courses_map, string lo
 
     }
     //printing out the locations in the map.
-    //debug print remove when done
-    cout << "Size of locations_and_themes is " << names_and_enrollments.size() << endl;
     for(map<string, int>::const_iterator it2 = names_and_enrollments.begin();
         it2 != names_and_enrollments.end(); ++it2) {
         if (it2->second == 50) {
@@ -281,17 +282,52 @@ void print_location_and_themes (multimap<string, Course> &courses_map, string lo
     }
 };
 
+/* Function to sort the strings into alphabetical order.
+ *
+ */
+bool compareFunction (std::string a, std::string b) {
+    return a<b;}
 
-
+/*
+ * Prints available courses in alphabetical order, firstly by location,
+ * secondly by theme, then by course name. Available means enrollment < 50.
+ */
 
 void print_available_courses (multimap<string, Course> & courses_map) {
+    vector<string> courses_alphabetical_order;
     for (multimap<string, Course>::iterator it3 = courses_map.begin();
          it3 != courses_map.end() ; ++it3) {
         if (!(it3->second.enrollments == 50)) {
-            cout << it3->first << " : " << it3->second.theme << " : " << it3->second.name << endl;
+            string course_info;
+            course_info = it3->first+ " : " + it3->second.theme+ " : "+it3->second.name;
+            courses_alphabetical_order.push_back(course_info);
         }
     }
-}
+    sort(courses_alphabetical_order.begin(), courses_alphabetical_order.end(), compareFunction);
+    for(auto const &courses : courses_alphabetical_order) {
+        cout << courses << endl;
+    }
+};
+
+
+/*
+ *  A function for printing out the courses from courses_map in a given them (string theme).
+ */
+
+void print_courses_in_theme (multimap<string, Course> & courses_map, string theme) {
+    set<string> coursethemes_alphabetical_order;
+    for (multimap<string, Course>::iterator iter = courses_map.begin();
+         iter != courses_map.end() ; ++iter) {
+        if (iter->second.theme == theme) {
+            coursethemes_alphabetical_order.insert(iter->second.name);
+        }
+    }
+
+    for(auto const &coursethemes : coursethemes_alphabetical_order) {
+        cout << coursethemes << endl;
+    }
+
+};
 
 
 
@@ -354,20 +390,16 @@ bool running_loop() {
 
         }
 
-
-
-
-
-
-
+        //splitting the user command into parts for easier handling later on
         vector<string> command_parts = split(user_command, ' ');
 
 
 
 
         //Prints out command_parts[1] as location and command_parts[2] as theme
-        //arranged alphabetically by course name
-        //special case of 2 theme being 2 words OR ONE thx specs.
+
+
+        //special case of 2 theme being 2 words and quotation marks.
         if (command_parts[0] == COURSES) {
             bool noerrors = false;
             cout << command_parts.size() << " <- command parts size" <<endl;
@@ -385,6 +417,7 @@ bool running_loop() {
 
 
             }
+            //special case for courses in theme with quotation marks but only 1 word as theme.
             else if (user_command.back() == '"' && command_parts.size() == 3) {
                 string removing_quotes = command_parts[2];
                 removing_quotes = removing_quotes.substr(1, removing_quotes.size()-2);
@@ -392,6 +425,7 @@ bool running_loop() {
                 command_parts.push_back(removing_quotes);
 
             }
+            //error checks
 
             else if (command_parts.size() != 3) {
                 cout << ERROR_IN_COMMAND << command_parts[0] <<endl;
@@ -411,10 +445,12 @@ bool running_loop() {
 
 
             }
+            //if earlier checks didn't flag commands as erroneus we call the print function.
             if (noerrors == true) {
                 print_location_and_themes(courses_map, command_parts[1], command_parts[2]);
                 continue;
             }
+            //otherwise something has gone wrong.
             else {
                 cout << ERROR_THEME << command_parts[2] << endl;
                 continue;
@@ -426,9 +462,24 @@ bool running_loop() {
 
         //prints out all the courses with these of command_parts[1]
         if (command_parts[0] == COURSES_IN_THEME) {
-            cout << "YOu hit courses in theme!";
-
+            bool noerrors = false;
+            for (multimap<string, Course>::iterator it = courses_map.begin();
+                 it != courses_map.end(); it++ ) {
+                if (it->second.theme == command_parts[1]) {
+                    noerrors = true;
+                }
+            }
+            if (noerrors) {
+                print_courses_in_theme(courses_map, command_parts[1]);
+                continue;
+            }
+            else {
+                cout << ERROR_THEME <<command_parts[1] << endl;
+                continue;
+            }
         }
+
+
         //todo print out the course with most popular theme
         if (user_command == FAV_THEME) {
             cout << "You hit favourite theme!";
