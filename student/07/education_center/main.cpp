@@ -353,21 +353,31 @@ void favourite_theme (multimap<string, Course> & courses_map) {
 
         }
     }
-        map<string, int>::iterator itr;
-        string highest_theme = "";
-        int highest_enrollment = 0;
-        for ( itr = most_popular_theme.begin(); itr != most_popular_theme.end(); ++itr) {
-            if(itr->second > highest_enrollment) {
-                highest_theme = itr->first;
-                highest_enrollment = itr->second;
-            }
+    map<string, int>::iterator itr;
+    map<string, int> topscorers;
+    string highest_theme = "";
+    int highest_enrollment = 0;
+    for ( itr = most_popular_theme.begin(); itr != most_popular_theme.end(); ++itr) {
+        if (itr->second == highest_enrollment) {
+            highest_theme = itr->first;
+            highest_enrollment = itr->second;
+            pair <string, int> highscorer (highest_theme, highest_enrollment);
+            topscorers.insert(highscorer);
+        }
+        if(itr->second > highest_enrollment) {
+            topscorers.clear();
+            highest_theme = itr->first;
+            highest_enrollment = itr->second;
+            pair <string, int> highscorer (highest_theme, highest_enrollment);
+            topscorers.insert(highscorer);
 
         }
 
-        cout << highest_enrollment << " enrollments in themes" <<endl;
-        cout << "---" << highest_theme << " " << endl;
-
-
+    }
+    cout << highest_enrollment << " enrollments in themes" << endl;
+    for(auto it = topscorers.cbegin(); it != topscorers.cend(); ++it) {
+        cout << "---" << it->first <<endl;
+    }
 };
 
 
