@@ -36,7 +36,7 @@ const string LOCATIONS = "locations";
 const string COURSES = "courses";
 const string AVAILABLE = "available";
 const string COURSES_IN_THEME = "courses_in_theme";
-const string FAV_THEME = "favourite_theme";
+const string FAV_THEME = "favorite_theme";
 
 
 //Structure for COURSES
@@ -440,6 +440,13 @@ bool running_loop() {
 
         }
 
+        //print out the course with most popular theme
+        if (user_command == FAV_THEME) {
+            favourite_theme(courses_map);
+            continue;
+
+        }
+
         //splitting the user command into parts for easier handling later on
         vector<string> command_parts = split(user_command, ' ');
 
@@ -528,12 +535,7 @@ bool running_loop() {
         }
 
 
-        //todo print out the course with most popular theme
-        if (user_command == FAV_THEME) {
-            favourite_theme(courses_map);
-            continue;
 
-        }
 
 
         else {
