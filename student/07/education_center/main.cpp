@@ -334,6 +334,7 @@ void favourite_theme (multimap<string, Course> & courses_map) {
 
     if (courses_map.size() == 0) {
         cout << "No enrollments" << endl;
+        return;
     }
 
     for (multimap<string, Course>::iterator iter = courses_map.begin();
@@ -376,7 +377,7 @@ void favourite_theme (multimap<string, Course> & courses_map) {
     }
     cout << highest_enrollment << " enrollments in themes" << endl;
     for(auto it = topscorers.cbegin(); it != topscorers.cend(); ++it) {
-        cout << "---" << it->first <<endl;
+        cout << "--- " << it->first <<endl;
     }
 };
 
@@ -539,7 +540,7 @@ bool running_loop() {
 
 
         else {
-            cout << UNKNOWN_COMMAND << user_command << endl;
+            cout << UNKNOWN_COMMAND << command_parts[0] << endl;
 
         }
 
