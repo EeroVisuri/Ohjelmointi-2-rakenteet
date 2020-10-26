@@ -73,7 +73,42 @@ vector<string> split(const string& s, const char delimiter, bool ignore_empty = 
         result.push_back(tmp);
     }
     return result;
-}
+};
+
+
+
+
+int string_to_int (vector<string> split_line) {
+    string enrolled = split_line[3];
+    stringstream stringtoint(enrolled);
+    int x = 0;
+    stringtoint >> x;
+    return x;
+};
+
+/* Function to create new course. Only called from read_file_to_struct in case
+ * error checks pass. Takes the multimap of courses and the split line
+ * from the file as parameters.
+ *
+ */
+
+void create_new_course(multimap<string, Course> &courses_map, vector<string>split_line) {
+    cout << "Course is new creating new course" << endl;
+    struct Course NewCourse;
+    NewCourse.name = split_line[2];
+    NewCourse.theme = split_line[1];
+    if (split_line[3] == "full") {
+        NewCourse.enrollments = 50;
+    }
+    else {
+        int x = string_to_int(split_line);
+        NewCourse.enrollments = x;
+    }
+    string location = split_line[0];
+    pair<string, Course> pair(location, NewCourse);
+    courses_map.insert(pair);
+};
+
 
 //function to load data from a file
 
@@ -84,8 +119,6 @@ vector<string> split(const string& s, const char delimiter, bool ignore_empty = 
  *
  * Otherwise returns "true" on read success.
  */
-
-
 
 bool read_file_to_struct (string filename, multimap<string, Course> &courses_map) {
     ifstream filereader;
@@ -103,29 +136,31 @@ bool read_file_to_struct (string filename, multimap<string, Course> &courses_map
             if (errorchecking(line)) {
                 cout << "Here's line: " << line << endl;
                 vector<string>split_line = split(line, ';');
-                struct Course NewCourse;
-                NewCourse.name = split_line[2];
-                NewCourse.theme = split_line[1];
-                if (split_line[3] == "full") {
-                    NewCourse.enrollments = 50;
-                }
-                else {
-                    string enrolled = split_line[3];
-                    stringstream stringtoint(enrolled);
-                    int x = 0;
-                    stringtoint >> x;
-                    NewCourse.enrollments = x;
-                }
+                string course_name = split_line[2];
                 string location = split_line[0];
-                pair<string, Course> pair(location, NewCourse);
-                courses_map.insert(pair);
-            }
-            else {
-                cout << "Error: empty field";
-                return false;
+                if (courses_map.size() == 0) {
+                    create_new_course(courses_map, split_line);
+                }
+                else if (courses_map.size() > 0) {
+                    for (multimap<string, Course>::iterator iter = courses_map.begin();
+                         iter != courses_map.end() ; ++iter) {
+                        cout << "In for-loop atm" << endl;
+
+                        if (iter->first == location && iter->second.name == course_name) {
+                            iter->second.enrollments = string_to_int(split_line);
+                            cout << "FOUND COURSE ADDING ENROLLMENTS" << endl;
+                        }
+
+                    }
+                    create_new_course(courses_map, split_line);
+                }
+                else if(!errorchecking(line)) {
+                    cout << "Error: empty field";
+                    return false;
+                }
+
             }
         }
-
     }
     return true;
 };
@@ -178,7 +213,7 @@ bool errorchecking (string line) {
     }
 
     return true;
-}
+};
 
 /*
  * Function for printing locations stored in the data structure.
@@ -329,15 +364,13 @@ bool running_loop() {
 
         //Prints out command_parts[1] as location and command_parts[2] as theme
         //arranged alphabetically by course name
-        //also maybe put this error checking somewhere else?
+        //special case of 2 theme being 2 words OR ONE thx specs.
         if (command_parts[0] == COURSES) {
             bool noerrors = false;
             cout << command_parts.size() << " <- command parts size" <<endl;
 
             if (user_command.back() == '"' && command_parts.size() == 4) {
-                cout << "Ollaan iffis";
-                cout << "Command parts size is: " << command_parts.size();
-                //special case of 2 theme being 2 words OR ONE thx specs.
+
                 string s1 = command_parts[2];
                 string s2 = command_parts[3];
                 string result = s1 + " " + s2;
@@ -351,12 +384,10 @@ bool running_loop() {
             }
             else if (user_command.back() == '"' && command_parts.size() == 3) {
                 string removing_quotes = command_parts[2];
-                cout << "Removing quotes is: " << removing_quotes << endl;
                 removing_quotes = removing_quotes.substr(1, removing_quotes.size()-2);
                 command_parts.pop_back();
-
                 command_parts.push_back(removing_quotes);
-                cout << command_parts[3] << "<- command parts 3" << endl;
+
             }
 
             else if (command_parts.size() != 3) {
@@ -404,7 +435,7 @@ bool running_loop() {
         //debug command remove from working version
         if (user_command == "debug") {
             for (auto x : courses_map) {
-                  cout << x.first << " " << x.second.name << x.second.theme << x.second.enrollments << endl;
+                cout << x.first << " " << x.second.name << x.second.theme << x.second.enrollments << endl;
 
             }
         }
