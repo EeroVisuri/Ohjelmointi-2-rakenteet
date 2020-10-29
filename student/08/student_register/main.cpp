@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <algorithm>
 
 const std::string HELP_TEXT = "N                  = List ordered by student numbers\n"
                               "U                  = List ordered alphabetically by user ids\n"
@@ -147,31 +148,53 @@ int main() {
                 continue;
             }
 
-
+            //changing the number in the Student-struct...
             std::map< std::string, Student* >::iterator it;
             it = student_numbers.find(parts[1]);
             if (it != student_numbers.end()) {
                 std::string temp_number;
                 temp_number = it->second->phone_number;
                 it->second->phone_number = new_number;
+                //reading all the info into a temporary string_vector...
+                std::ifstream in(file_name);
+                std::vector<std::string> strings_vector;
 
-                std::fstream out(file_name);
-
-                std::string filelines;
-                while (getline(out, line)) {
-                    //debug print
-                    std::cout << "Line is: " << line << std::endl;
-                    std::size_t pos = line.find(temp_number);
-                    if (pos != std::string::npos) {
-                        line.replace(pos, temp_number.length(), new_number);
-                        out << line << std::endl;
-                    }
-                out << line << std::endl;
+                if (!in) {
+                    return EXIT_FAILURE;
                 }
-                out.close();
-                continue;
+
+                //if we find the old phone number in the vector, we replace it with the new one
+                std::string line;
+                while (getline(in, line)) {
+                    if (line.size() > 0) {
+                        if (line.find(temp_number) != std::string::npos) {
+                            line.replace(line.find(temp_number), temp_number.length(), new_number);
+                            strings_vector.push_back(line);
+                        }
+                        //otherwise we just push the info line by line into the vector
+                        else {
+                            strings_vector.push_back(line);
+                        }
+
+
+                    }
+                }
+                in.close();
+                //once we're done push the info out of the vector into the file
+                std::ofstream out(file_name);
+                if (out) {
+                    for (const auto &e : strings_vector) {
+                        out << e << "\n";
+                    }
+                }
+
+
 
             }
+
+
+
+
 
 
 
