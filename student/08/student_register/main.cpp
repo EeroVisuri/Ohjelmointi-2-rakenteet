@@ -3,7 +3,6 @@
 #include <string>
 #include <vector>
 #include <map>
-#include <algorithm>
 
 const std::string HELP_TEXT = "N                  = List ordered by student numbers\n"
                               "U                  = List ordered alphabetically by user ids\n"
