@@ -141,6 +141,7 @@ int main() {
                 continue;
             }
             std::cout << "Enter a new phone number: ";
+            std:: cout << std::endl;
             std::string new_number;
             std::getline (std::cin, new_number);
             if (!is_valid_phone_number(new_number)) {
