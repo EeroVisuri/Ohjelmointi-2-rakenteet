@@ -172,6 +172,7 @@ int main() {
                         if (line.find(temp_number) != std::string::npos) {
                             line.replace(line.find(temp_number), temp_number.length(), new_number);
                             strings_vector.push_back(line);
+                            std::sort (strings_vector.begin(), strings_vector.end());
                         }
                         //otherwise we just push the info line by line into the vector
                         else {
@@ -180,7 +181,7 @@ int main() {
                     }
                 }
                 in.close();
-                std::sort (strings_vector.begin(), strings_vector.end());
+
                 //once we're done push the info out of the vector into the file
                 std::ofstream out(file_name);
                 if (out) {
