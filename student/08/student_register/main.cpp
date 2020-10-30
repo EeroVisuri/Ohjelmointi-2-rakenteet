@@ -159,6 +159,7 @@ int main() {
                 it->second->phone_number = new_number;
                 //reading all the info into a temporary string_vector...
                 std::ifstream in(file_name);
+                std::sort (user_ids.begin(), user_ids.end());
                 std::vector<std::string> strings_vector;
 
                 if (!in) {
@@ -172,7 +173,7 @@ int main() {
                         if (line.find(temp_number) != std::string::npos) {
                             line.replace(line.find(temp_number), temp_number.length(), new_number);
                             strings_vector.push_back(line);
-                            std::sort (strings_vector.begin(), strings_vector.end());
+
                         }
                         //otherwise we just push the info line by line into the vector
                         else {
