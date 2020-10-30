@@ -19,6 +19,8 @@ struct Student {
     std::string skype;
 };
 
+
+
 std::vector<std::string> split(const std::string& s,
                                const char delimiter,
                                const bool ignore_empty = false) {
@@ -159,7 +161,7 @@ int main() {
                 it->second->phone_number = new_number;
                 //reading all the info into a temporary string_vector...
                 std::ifstream in(file_name);
-                std::sort (user_ids.begin(), user_ids.end());
+
                 std::vector<std::string> strings_vector;
 
                 if (!in) {
@@ -182,7 +184,7 @@ int main() {
                     }
                 }
                 in.close();
-
+                std::reverse(strings_vector.begin(), strings_vector.end());
                 //once we're done push the info out of the vector into the file
                 std::ofstream out(file_name);
                 if (out) {
