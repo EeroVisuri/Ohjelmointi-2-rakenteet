@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <algorithm>
 
 const std::string HELP_TEXT = "N                  = List ordered by student numbers\n"
                               "U                  = List ordered alphabetically by user ids\n"
@@ -176,11 +177,10 @@ int main() {
                         else {
                             strings_vector.push_back(line);
                         }
-
-
                     }
                 }
                 in.close();
+                std::reverse(strings_vector.begin(), strings_vector.end());
                 //once we're done push the info out of the vector into the file
                 std::ofstream out(file_name);
                 if (out) {
