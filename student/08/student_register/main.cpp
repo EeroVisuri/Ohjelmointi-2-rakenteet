@@ -180,7 +180,7 @@ int main() {
                     }
                 }
                 in.close();
-                std::reverse(strings_vector.begin(), strings_vector.end());
+                std::sort (strings_vector.begin(), strings_vector.end());
                 //once we're done push the info out of the vector into the file
                 std::ofstream out(file_name);
                 if (out) {
