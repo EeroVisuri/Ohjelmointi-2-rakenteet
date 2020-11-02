@@ -53,6 +53,7 @@ int return_final_evaluation (vector<string>& vector_for_calculations) {
             //if it is an operator, we pop 2 times and then do the operation inferred by the operator
             if (numberstack.size() < 2) {
                 cout << "Error: too few operands" << endl;
+                exit(EXIT_FAILURE);
 
             }
             int num2 = numberstack.top();
@@ -80,6 +81,7 @@ int return_final_evaluation (vector<string>& vector_for_calculations) {
             else if (a[0] == '*') {
                 numberstack.push(num1 * num2);
             }
+            //if we got this far, the operator must've been something else so we throw an error.
             else {
                 cout << "Error: Unknown character" << endl;
                 exit(EXIT_FAILURE);
@@ -87,17 +89,15 @@ int return_final_evaluation (vector<string>& vector_for_calculations) {
 
         }
     }
-
-    if (numberstack.size() == 1) {
         return numberstack.top();
-    }
-    else {
-        cout << "Error: Too few operators" << endl;
-        exit(EXIT_FAILURE);
-    }
 }
 
-
+bool is_number(char c)
+{
+    if (isdigit(c))
+        return true;
+    return false;
+}
 
 
 
@@ -121,7 +121,17 @@ int main()
 
 
     vector<string>vector_for_calculations = split(input, ' ');
-
+    int numbers_in_input = 0;
+    int input_length = input.size();
+    for (int i = 0; i < input_length; ++i) {
+        if (is_number(input.at(i))) {
+            numbers_in_input++;
+        }
+    }
+    if (numbers_in_input < input_length/2) {
+        cout << "Too few operators" << endl;
+        return EXIT_FAILURE;
+    }
 
     int final_eval = return_final_evaluation(vector_for_calculations);
 
