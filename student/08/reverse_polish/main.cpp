@@ -86,9 +86,9 @@ int main()
 {
 
     cout << "Input an expression in reverse Polish notation (end with #):" << endl;
+    cout << "EXPR> ";
     string input;
     getline (cin, input);
-    cout << input;
 
     if (input.back() != '#') {
         cout << "End with '#'!" << endl;
