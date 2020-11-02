@@ -131,7 +131,7 @@ int main()
         }
     }
     if (numbers_in_input != (input_length/2+1)/2) {
-        cout << "Too few operators" << endl;
+        cout << "Error: Too few operators" << endl;
         return EXIT_FAILURE;
     }
     //variable to save our final number and printing it out.
