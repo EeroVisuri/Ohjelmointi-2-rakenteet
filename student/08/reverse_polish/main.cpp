@@ -51,6 +51,10 @@ int return_final_evaluation (vector<string>& vector_for_calculations) {
                 break;
             }
             //if it is an operator, we pop 2 times and then do the operation inferred by the operator
+            if (numberstack.size() < 2) {
+                cout << "Error: too few operands" << endl;
+
+            }
             int num2 = numberstack.top();
             numberstack.pop();
             int num1 = numberstack.top();
@@ -66,9 +70,8 @@ int return_final_evaluation (vector<string>& vector_for_calculations) {
             //we don't wanna divide by zero.
             else if (a[0] == '/') {
                 if (num2 == 0) {
-                    cout << "Error: Division by zero";
-                    return EXIT_FAILURE;
-                    break;
+                    cout << "Error: Division by zero"<< endl;;
+                    exit(EXIT_FAILURE);
                 }
                 else {
                     numberstack.push(num1 / num2);
@@ -77,10 +80,26 @@ int return_final_evaluation (vector<string>& vector_for_calculations) {
             else if (a[0] == '*') {
                 numberstack.push(num1 * num2);
             }
+            else {
+                cout << "Error: Unknown character" << endl;
+                exit(EXIT_FAILURE);
+            }
+
         }
     }
-    return numberstack.top();
+
+    if (numberstack.size() == 1) {
+        return numberstack.top();
+    }
+    else {
+        cout << "Error: Too few operators" << endl;
+        exit(EXIT_FAILURE);
+    }
 }
+
+
+
+
 
 int main()
 {
@@ -94,12 +113,19 @@ int main()
         cout << "End with '#'!" << endl;
         return EXIT_FAILURE;
     }
+
+    if (!isdigit(input[0])) {
+        cout << "Error: Expression must start with a number" << endl;
+        return EXIT_FAILURE;
+    }
+
+
     vector<string>vector_for_calculations = split(input, ' ');
 
 
     int final_eval = return_final_evaluation(vector_for_calculations);
-    cout << "Correct: " << final_eval << " is the result" << endl;
 
+    cout << "Correct: " << final_eval << " is the result" << endl;
 
     return EXIT_SUCCESS;
 }
