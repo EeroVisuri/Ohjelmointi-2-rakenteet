@@ -52,7 +52,7 @@ int return_final_evaluation (vector<string>& vector_for_calculations) {
             }
             //if it is an operator, we pop 2 times and then do the operation inferred by the operator
             if (numberstack.size() < 2) {
-                cout << "Error: too few operands" << endl;
+                cout << "Error: Too few operands" << endl;
                 exit(EXIT_FAILURE);
 
             }
@@ -131,8 +131,6 @@ int main()
         }
     }
     if (numbers_in_input != (input_length/2+1)/2) {
-        cout << numbers_in_input << "Numbers in input" << endl;
-        cout << input_length/2+1 << "half inputlength" << endl;
         cout << "Too few operators" << endl;
         return EXIT_FAILURE;
     }
