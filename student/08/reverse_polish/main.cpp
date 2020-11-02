@@ -91,7 +91,7 @@ int return_final_evaluation (vector<string>& vector_for_calculations) {
     }
         return numberstack.top();
 }
-
+//function to check if char is a number. returns true if yes, otherwise false.
 bool is_number(char c)
 {
     if (isdigit(c))
@@ -119,8 +119,10 @@ int main()
         return EXIT_FAILURE;
     }
 
-
+    //splitting the input with our method
     vector<string>vector_for_calculations = split(input, ' ');
+
+    //doing an ugly hack to check that there are enough operators for our calculations.
     int numbers_in_input = 0;
     int input_length = input.size();
     for (int i = 0; i < input_length; ++i) {
@@ -128,11 +130,13 @@ int main()
             numbers_in_input++;
         }
     }
-    if (numbers_in_input < input_length/2) {
+    if (numbers_in_input != (input_length/2+1)/2) {
+        cout << numbers_in_input << "Numbers in input" << endl;
+        cout << input_length/2+1 << "half inputlength" << endl;
         cout << "Too few operators" << endl;
         return EXIT_FAILURE;
     }
-
+    //variable to save our final number and printing it out.
     int final_eval = return_final_evaluation(vector_for_calculations);
 
     cout << "Correct: " << final_eval << " is the result" << endl;
