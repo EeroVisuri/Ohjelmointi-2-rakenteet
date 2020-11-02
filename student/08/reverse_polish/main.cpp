@@ -73,12 +73,9 @@ int return_final_evaluation (vector<string>& vector_for_calculations) {
                 else {
                     numberstack.push(num1 / num2);
                 }
-
-
             }
             else if (a[0] == '*') {
                 numberstack.push(num1 * num2);
-
             }
         }
     }
@@ -88,7 +85,7 @@ int return_final_evaluation (vector<string>& vector_for_calculations) {
 int main()
 {
 
-    cout << "Input an expression in reverse Polish notation (end with #)" << endl;
+    cout << "Input an expression in reverse Polish notation (end with #):" << endl;
     string input;
     getline (cin, input);
     cout << input;
