@@ -98,7 +98,7 @@ void Queue::print()
         std::cout << "RED: ";
     }
     if (first_ == nullptr) {
-        std::cout << "No vehicles waiting in traffic lights."<< std::endl;;
+        std::cout << "No vehicles waiting in traffic lights"<< std::endl;;
         return;
     }
     Vehicle* current_vehicle = first_;
