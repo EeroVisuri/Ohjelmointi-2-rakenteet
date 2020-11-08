@@ -68,6 +68,10 @@ bool Cards::bottom_to_top() {
     if (top_ == nullptr) {
         return false;
     }
+    if (top_->next == nullptr) {
+        return true;
+    }
+
     Card_data* last = top_;
     Card_data* second_to_last = NULL;
     while (last->next != nullptr) {
