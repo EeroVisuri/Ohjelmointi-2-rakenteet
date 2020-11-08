@@ -56,9 +56,15 @@ void Queue::switch_light() {
         std::cout << "Vehicles(s) ";
         for (unsigned int i = 0; i < cycle_; ++i) {
             std::cout << current_vehicle->reg_num << " ";
-            if (current_vehicle!= nullptr) {
+            if (current_vehicle->next!= nullptr) {
                 dequeue();
                 current_vehicle = current_vehicle->next;
+            }
+            else if (current_vehicle->next == nullptr) {
+                dequeue();
+                std::cout << " can go. ";
+                is_green_ = false;
+                return;
             }
             else {
                 std::cout << " can go. ";
