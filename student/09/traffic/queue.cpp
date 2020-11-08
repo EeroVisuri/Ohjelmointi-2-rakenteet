@@ -72,12 +72,11 @@ void Queue::switch_light() {
                 return;
             }
         }
-        std::cout << " can go. ";
+        std::cout << " can go. "<< std::endl;
         is_green_ = false;
         return;
     }
     else {
-        std::cout << "RED: ";
         print();
         std::cout << std::endl;
     }
