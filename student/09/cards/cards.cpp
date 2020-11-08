@@ -88,6 +88,9 @@ bool Cards::top_to_bottom() {
     if (top_ == nullptr) {
         return false;
     }
+    if (top_->next == nullptr) {
+        return true;
+    }
     Card_data* first = top_;
     Card_data* last = top_;
     while (last->next != nullptr) {
@@ -99,6 +102,8 @@ bool Cards::top_to_bottom() {
 
     return true;
 }
+
+
 // Prints the content of the data structure with ordinal numbers to the
 // output stream given as a parameter starting from the last element.
 void Cards::print_from_bottom_to_top(std::ostream &s) {
