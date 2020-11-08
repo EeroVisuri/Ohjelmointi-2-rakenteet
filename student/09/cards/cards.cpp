@@ -53,11 +53,13 @@ bool Cards::remove(int &id) {
         top_ = nullptr;
     }
 
-    id = top_->data;
-    Card_data* temp = top_->next;
-    delete(top_);
-    top_ = temp;
+    Card_data* temp = top_;
+    id = temp->data;
+    delete top_;
+    top_ = temp->next;
+    delete temp;
     return true;
+
 }
 
 // Moves the last element of the data structure as the first one.
