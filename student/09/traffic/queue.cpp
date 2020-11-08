@@ -62,23 +62,22 @@ void Queue::switch_light() {
             }
             else if (current_vehicle->next == nullptr) {
                 dequeue();
-                std::cout << " can go on"<< std::endl;
+                std::cout << "can go on"<< std::endl;
                 is_green_ = false;
                 return;
             }
             else {
-                std::cout << " can go on"<< std::endl;
+                std::cout << "can go on"<< std::endl;
                 is_green_ = false;
                 return;
             }
         }
-        std::cout << " can go. "<< std::endl;
+        std::cout << "can go on"<< std::endl;
         is_green_ = false;
         return;
     }
     else {
         print();
-        std::cout << std::endl;
     }
 }
 
