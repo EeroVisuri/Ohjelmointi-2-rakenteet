@@ -55,9 +55,8 @@ bool Cards::remove(int &id) {
     }
 
     Card_data* temp = top_;
-    id = temp->data;
-    delete top_;
-    top_ = temp->next;
+    id = top_->data;
+    top_ = top_->next;
     delete temp;
     return true;
 
