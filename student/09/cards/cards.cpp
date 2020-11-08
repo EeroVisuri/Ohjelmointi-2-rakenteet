@@ -47,10 +47,16 @@ bool Cards::remove(int &id) {
     if (top_ == nullptr) {
         return false;
     }
+    if (top_->next == nullptr) {
+        id = top_->data;
+        delete top_;
+        top_ = nullptr;
+    }
 
     id = top_->data;
+    Card_data* temp = top_->next;
     delete(top_);
-    top_ = nullptr;
+    top_ = temp;
     return true;
 }
 
@@ -93,9 +99,22 @@ bool Cards::top_to_bottom() {
 }
 // Prints the content of the data structure with ordinal numbers to the
 // output stream given as a parameter starting from the last element.
-void Cards::print_from_bottom_to_top(std::ostream &s)
-{
-    (void)s;
+void Cards::print_from_bottom_to_top(std::ostream &s) {
+    //ongoing...
+    Card_data* last = top_;
+    int count = 0;
+    int cardnumber = 1;
+    if (last->next != nullptr) {
+        count++;
+        last = last->next;
+    }
+    while (count != 0) {
+        s << cardnumber << last->data;
+        count--;
+
+    }
+
+
 }
 //DESTRUCTOR
 Cards::~Cards()
