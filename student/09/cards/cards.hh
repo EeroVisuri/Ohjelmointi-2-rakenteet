@@ -21,6 +21,8 @@ class Cards {
       // Returns false, if the data structure is empty, otherwise returns true.
       bool remove(int& id);
 
+      // Moves the last element of the data structure as the first one.
+      // Returns false, if the data structure is empty, otherwise returns true.
       bool bottom_to_top();
 
       // Moves the first element of the data structure as the last one.
