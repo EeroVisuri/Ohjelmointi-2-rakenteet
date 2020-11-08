@@ -35,11 +35,11 @@ int main() {
 
     cout << endl << "print_from_top_to_bottom" << endl;
     deck.print_from_top_to_bottom(cout);
-/*
+
     cout << endl << "print_from_bottom_to_top" << endl;
     deck.print_from_bottom_to_top(cout);
 
     cout << endl << "destructor" << endl;
     return EXIT_SUCCESS;
- */
+
 }

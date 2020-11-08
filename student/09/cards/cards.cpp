@@ -47,8 +47,10 @@ bool Cards::remove(int &id) {
     if (top_ == nullptr) {
         return false;
     }
+
     id = top_->data;
-    free(top_);
+    delete(top_);
+    top_ = nullptr;
     return true;
 }
 
