@@ -37,7 +37,7 @@ void Queue::enqueue(string reg) {
             return;
         }
     }
-    std::cout << "GREEN: The vehicle " << reg << " need not stop to wait";
+    std::cout << "GREEN: The vehicle " << reg << " need not stop to wait"<< std::endl;;
 }
 
 // Switches the color of traffic light from green to red or vice versa.
@@ -62,12 +62,12 @@ void Queue::switch_light() {
             }
             else if (current_vehicle->next == nullptr) {
                 dequeue();
-                std::cout << " can go. ";
+                std::cout << " can go on";
                 is_green_ = false;
                 return;
             }
             else {
-                std::cout << " can go. ";
+                std::cout << " can go on";
                 is_green_ = false;
                 return;
             }
@@ -75,6 +75,11 @@ void Queue::switch_light() {
         std::cout << " can go. ";
         is_green_ = false;
         return;
+    }
+    else {
+        std::cout << "RED: ";
+        print();
+        std::cout << std::endl;
     }
 }
 
@@ -95,7 +100,7 @@ void Queue::print()
         std::cout << "RED: ";
     }
     if (first_ == nullptr) {
-        std::cout << "No vehicles are waiting in traffic lights.";
+        std::cout << "No vehicles waiting in traffic lights."<< std::endl;;
         return;
     }
     Vehicle* current_vehicle = first_;
