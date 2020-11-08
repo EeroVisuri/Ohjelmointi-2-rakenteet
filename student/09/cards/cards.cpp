@@ -93,7 +93,7 @@ bool Cards::top_to_bottom() {
 // output stream given as a parameter starting from the last element.
 void Cards::print_from_bottom_to_top(std::ostream &s)
 {
-
+    (void)s;
 }
 //DESTRUCTOR
 Cards::~Cards()
