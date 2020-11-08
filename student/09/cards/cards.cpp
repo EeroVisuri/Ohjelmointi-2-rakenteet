@@ -51,6 +51,7 @@ bool Cards::remove(int &id) {
         id = top_->data;
         delete top_;
         top_ = nullptr;
+        return true;
     }
 
     Card_data* temp = top_;
