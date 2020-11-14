@@ -19,3 +19,15 @@ double multiplication(double left, double right) {
 double division(double left, double right) {
     return left / right;
 }
+
+double exponentiation(double left, double right)
+{
+    double result = 1;
+
+    for (double i = 0; i < right; ++i) {
+        result *= left;
+
+    }
+    return result;
+
+}

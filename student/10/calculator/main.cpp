@@ -57,7 +57,10 @@ const vector<Command> COMMANDS = {
     {"STOP", 0, true, nullptr},
     {"QUIT", 0, true, nullptr},
     {"EXIT", 0, true, nullptr},
-    {"Q", 0, true, nullptr}
+    {"Q", 0, true, nullptr},
+    {"^", 2, false, exponentiation},
+    {"POWER", 2, false, exponentiation},
+    {"EXP", 2, false, exponentiation},
 };
 
 
@@ -88,6 +91,9 @@ int main() {
         string command_to_be_executed = pieces.at(0);
 
         // TODO: Implement command execution here!
+
+        //TODO: As a new operation, insert exponentiation in the calculator. Like the existing operations,
+        //it will take two parameters: base and exponent. The commands that execute this operation are ^, POWER, and EXP.
 
 
         for (unsigned long i = 0; i < command_to_be_executed.size(); ++i) {
