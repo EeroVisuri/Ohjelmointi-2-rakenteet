@@ -90,38 +90,41 @@ int main() {
         // TODO: Implement command execution here!
 
 
+        for (unsigned long i = 0; i < command_to_be_executed.size(); ++i) {
+            command_to_be_executed.at(i) = toupper(command_to_be_executed.at(i));
+        }
+
+
         double left;
         double right;
         double result;
-
+        bool found = false;
 
 
 
         //fix this to work with upper and lowercase letter strings or mixed ones.
         for (auto s : COMMANDS) {
 
-
-            if (pieces.size()-1 != s.parameter_number) {
-                cout << "Error: wrong number of parameters." << endl;
-                break;
-            }
-            if (s.parameter_number > 0) {
-                if (!string_to_double(pieces[1], left)) {
-                    cout << "Error: a non-number operand." << endl;
-                    continue;
-                }
-            }
-            if (s.parameter_number > 1) {
-                if (!string_to_double(pieces[2], right)) {
-                    cout << "Error: a non-number operand." << endl;
-                    continue;
-                }
-            }
-
-
             if (command_to_be_executed == s.str) {
+                found = true;
+                if (pieces.size()-1 != s.parameter_number) {
+                    cout << "Error: wrong number of parameters." << endl;
+                    break;
+                }
+                if (s.parameter_number > 0) {
+                    if (!string_to_double(pieces[1], left)) {
+                        cout << "Error: a non-number operand." << endl;
+                        continue;
+                    }
+                }
+                if (s.parameter_number > 1) {
+                    if (!string_to_double(pieces[2], right)) {
+                        cout << "Error: a non-number operand." << endl;
+                        continue;
+                    }
+                }
+
                 if (s.exit) {
-                    cout << "WAS STOP" << endl;
                     cout << GREETING_AT_END << endl;
                     return EXIT_SUCCESS;
                 }
@@ -130,6 +133,13 @@ int main() {
                 break;
             }
         }
+        if (!found) {
+            cout << "Error: unknown command." << endl;
+            continue;
+        }
+
+
+
 
 
 
