@@ -136,9 +136,22 @@ void Company::printSubordinates(const std::string &id, std::ostream &output)
 
 void Company::printColleagues(const std::string &id, std::ostream &output) const {
 
+    Employee* workerPTR = getPointer(id);
+    Employee* bossPTR = workerPTR->boss_;
+    int colleagues = 0;
+
+    for (unsigned long i = 0; i < employees.size(); ++i) {
+        if (employees.at(i)->boss_ == bossPTR && employees.at(i)->id_ != workerPTR->id_) {
+            colleagues++;
+        }
+    }
+    output << id << " has " << colleagues << " department collagues:" << std::endl;
+    for (unsigned long i = 0; i < employees.size(); ++i) {
+        if (employees.at(i)->boss_ == bossPTR && employees.at(i)->id_ != workerPTR->id_) {
+            output << employees.at(i)->id_ << std::endl;
+        }
+    }
 }
-
-
 
 
 
