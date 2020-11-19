@@ -55,12 +55,9 @@ void Company::printEmployees(std::ostream &output) const {
 }
 
 /*
- * All the following functions have the same error messages:
+ * All the following functions have the same error message:
  *  If ID wasn't found in datastructure:
- *      "Error. <ID> not found."
- *  If the printing list is empty:
- *      "Error. <ID> has no <group's name>."
- * -------------------------------------------------------------------
+ *  "Error. <ID> not found."
  */
 
 /* Description: Adds new boss-subordinate relation
@@ -98,9 +95,10 @@ void Company::addRelation(const std::string &subordinate,
 void Company::printBoss(const std::string &id, std::ostream &output) const {
     Employee* workerPTR = getPointer(id);
     if (workerPTR != nullptr) {
+        output << id << " has " << "1" << " bosses:" << std::endl;
         output << workerPTR->boss_ << std::endl;
     }
-    else if (workerPTR == nullptr) {
+    else {
         printNotFound(id, output);
     }
 }
@@ -115,11 +113,30 @@ void Company::printSubordinates(const std::string &id, std::ostream &output)
     const {
 
     Employee* bossPTR = getPointer(id);
+    if (bossPTR != nullptr) {
+        output << id << " has " << bossPTR->subordinates_.size() << "subordinates:" << std::endl;
+        for (unsigned long i = 0; i < bossPTR->subordinates_.size(); ++i) {
+            output << bossPTR->subordinates_.at(i) << std::endl;
+        }
+    }
+    else {
+        printNotFound(id, output);
+    }
 
 }
 
 
+/* Description: Prints the colleagues for the employee.
+ *  (Employees who shares their direct boss)
+ * Parameters:
+ *  Param1: ID of the employee
+ *  Param2: Output-stream for printing
+ */
 
+
+void Company::printColleagues(const std::string &id, std::ostream &output) const {
+
+}
 
 
 
@@ -137,6 +154,8 @@ Employee* Company::getPointer(const std::string &id) const {
     }
     return nullptr;
 }
+
+
 // Printing errors.
 void Company::printNotFound(const std::string &id, std::ostream &output) const{
     output << "Error. " << id << " not found." << std::endl;
