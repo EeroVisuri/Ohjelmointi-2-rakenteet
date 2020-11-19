@@ -48,7 +48,8 @@ void Company::printEmployees(std::ostream &output) const {
     //for-loop for printing out all employees in the employees-vector.
 
     for (unsigned long i = 0; i < employees.size(); ++i) {
-        output << employees.at(i)->id_ << employees.at(i)->department_ << employees.at(i)->time_in_service_ << std::endl;
+        output << employees.at(i)->id_ << employees.at(i)->department_ <<
+                  employees.at(i)->time_in_service_ << std::endl;
     }
 
 }
@@ -69,8 +70,76 @@ void Company::printEmployees(std::ostream &output) const {
  *  Param3: Output-stream for error-printing
  */
 
-void Company::addRelation(const std::string &subordinate, const std::string &boss,
-                          std::ostream &output) {
-    //todo: this
+void Company::addRelation(const std::string &subordinate,
+                          const std::string &boss, std::ostream &output) {
+
+    //If the boss given as a parameter does not exist,
+    //it is assumed that the given employee has no boss.
+    //This is not considered as an error, and no error message is given.
+
+    Employee* subordPTR = getPointer(subordinate);
+    if (subordPTR != nullptr) {
+        Employee* bossPTR = getPointer(boss);
+        subordPTR->boss_ = bossPTR;
+        bossPTR->subordinates_.push_back(subordPTR);
+        return;
+    }
+    else {
+        printNotFound(subordinate, output);
+    }
+}
+
+
+/* Description: Prints the direct boss of the employee.
+ * Parameters:
+ *  Param1: ID of the employee
+ *  Param2: Output-stream for printing
+ */
+void Company::printBoss(const std::string &id, std::ostream &output) const {
+    Employee* workerPTR = getPointer(id);
+    if (workerPTR != nullptr) {
+        output << workerPTR->boss_ << std::endl;
+    }
+    else if (workerPTR == nullptr) {
+        printNotFound(id, output);
+    }
+}
+
+/* Description: Prints direct subordinates for the employee.
+ * Parameters:
+ *  Param1: ID of the employee
+ *  Param2: Output-stream for printing
+ */
+
+void Company::printSubordinates(const std::string &id, std::ostream &output)
+    const {
+
+    Employee* bossPTR = getPointer(id);
 
 }
+
+
+
+
+
+
+
+
+// Return a pointer for ID.
+// Reduces the amount of for-loops we'd have to write otherwise
+// Since we can just use this one.
+// Returns a nullptr if ID wasn't found.
+Employee* Company::getPointer(const std::string &id) const {
+    for (unsigned long i = 0; i < employees.size(); ++i) {
+        if (employees.at(i)->id_ == id) {
+            return employees.at(i);
+        }
+    }
+    return nullptr;
+}
+// Printing errors.
+void Company::printNotFound(const std::string &id, std::ostream &output) const{
+    output << "Error. " << id << " not found." << std::endl;
+}
+
+
