@@ -20,6 +20,12 @@
 #include <iostream>
 
 
+/*
+ * Created a getPointer-funktion to grab employee pointers and
+ * printNotFound for printing the error message if the employee doesnt exist.
+ */
+
+
 // Named constants to improve readability in other modules.
 const std::string EMPTY = "";
 const double NO_TIME = -1.0;
@@ -181,7 +187,7 @@ private:
      * to make things easier and to avoid "copy-paste-coding"
      */
 
-    // Return a pointer for ID.
+    // Return a pointer for ID. Returns nullptr if id doesn't exist.
     Employee* getPointer(const std::string& id) const;
 
     // Printing errors.

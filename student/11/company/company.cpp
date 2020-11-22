@@ -1,6 +1,6 @@
 #include "company.hh"
 #include <algorithm>
-
+#include <memory>
 
 /* Description: Adds a new Employee to the datastructure.
  * Parameters:
@@ -12,6 +12,16 @@
  *  If employees's ID is already in datastructure:
  *      "Error. Employee already added."
  */
+
+Company::Company()
+{
+
+}
+
+Company::~Company()
+{
+
+}
 
 void Company::addNewEmployee(const std::string &id, const std::string &dep,
                              const double &time, std::ostream &output) {
@@ -75,14 +85,18 @@ void Company::addRelation(const std::string &subordinate,
     //This is not considered as an error, and no error message is given.
 
     Employee* subordPTR = getPointer(subordinate);
+
     if (subordPTR != nullptr) {
         Employee* bossPTR = getPointer(boss);
         subordPTR->boss_ = bossPTR;
         bossPTR->subordinates_.push_back(subordPTR);
         return;
     }
+    //if the id points to a nullpointer, print error, free memory and return.
     else {
         printNotFound(subordinate, output);
+        delete subordPTR;
+        return;
     }
 }
 
@@ -93,13 +107,23 @@ void Company::addRelation(const std::string &subordinate,
  *  Param2: Output-stream for printing
  */
 void Company::printBoss(const std::string &id, std::ostream &output) const {
+
     Employee* workerPTR = getPointer(id);
+
+    //if the id points to a nullpointer, print error, free memory and return.
     if (workerPTR != nullptr) {
+        if (workerPTR->boss_ == nullptr) {
+            output << id << " has no bosses." << std::endl;
+            delete workerPTR;
+            return;
+        }
         output << id << " has " << "1" << " bosses:" << std::endl;
         output << workerPTR->boss_ << std::endl;
+        delete workerPTR;
     }
     else {
         printNotFound(id, output);
+        delete workerPTR;
     }
 }
 
@@ -113,14 +137,22 @@ void Company::printSubordinates(const std::string &id, std::ostream &output)
     const {
 
     Employee* bossPTR = getPointer(id);
+    //if the id points to a nullpointer, print error, free memory and return.
     if (bossPTR != nullptr) {
+        if (bossPTR->subordinates_.size() == 0) {
+            output << id << " has no subordinates." << std::endl;
+            delete bossPTR;
+            return;
+        }
         output << id << " has " << bossPTR->subordinates_.size() << "subordinates:" << std::endl;
         for (unsigned long i = 0; i < bossPTR->subordinates_.size(); ++i) {
             output << bossPTR->subordinates_.at(i) << std::endl;
+            delete bossPTR;
         }
     }
     else {
         printNotFound(id, output);
+        delete bossPTR;
     }
 
 }
@@ -145,12 +177,67 @@ void Company::printColleagues(const std::string &id, std::ostream &output) const
             colleagues++;
         }
     }
+
+    //if there are no colleagues, print out so, free memory and return.
+    if (colleagues == 0) {
+        output << id << " has no colleagues." << std::endl;
+        delete workerPTR;
+        delete bossPTR;
+        return;
+    }
     output << id << " has " << colleagues << " department collagues:" << std::endl;
     for (unsigned long i = 0; i < employees.size(); ++i) {
         if (employees.at(i)->boss_ == bossPTR && employees.at(i)->id_ != workerPTR->id_) {
             output << employees.at(i)->id_ << std::endl;
         }
     }
+    delete workerPTR;
+    delete bossPTR;
+}
+
+/* Description: Prints all-level colleagues for the employee.
+ *  (Employees who share their department and belong to the same hierarchy)
+ * Parameters:
+ *  Param1: ID of the person
+ *  Param2: Output-stream for printing
+ */
+
+
+//todo: tee vektori, johon tunget työntekijät. Etsi rekursiolla pomo jolla ei
+// ole pomoa, sit etsit työntekijät jotka on tietyllä osastolla
+//jos vector size o 0 = output << id << has no deparment colleagues.
+void Company::printDepartment(const std::string &id, std::ostream &output)
+    const {
+
+    Employee* workerPTR = getPointer(id);
+    //if the id points to a nullpointer, print error, free memory and return.
+    if (workerPTR == nullptr) {
+        printNotFound(id, output);
+        delete workerPTR;
+        return;
+    }
+    //A vector to store the colleagues
+    std::vector<Employee> departmentColleagues;
+
+
+
+
+
+
+}
+
+/* Description: Prints the employee with the longest time in service
+ *  in the ID's line management.
+ * Parameters:
+ *  Param1: ID of the employee
+ *  Param2: Output-stream for printing
+ */
+
+//todo: function.
+
+void Company::printLongestTimeInLineManagement(const std::string &id, std::ostream &output) const
+{
+
 }
 
 
@@ -169,7 +256,8 @@ Employee* Company::getPointer(const std::string &id) const {
 }
 
 
-// Printing errors.
+
+// Printing error if no ID can be found.
 void Company::printNotFound(const std::string &id, std::ostream &output) const{
     output << "Error. " << id << " not found." << std::endl;
 }
