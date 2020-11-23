@@ -37,11 +37,13 @@ void Company::addNewEmployee(const std::string &id, const std::string &dep,
     }
     //otherwise if we got to here, we can create the new employee
     //and add their information into the datastructure.
-    //create the new_employee object
+    //create the new_employee
     Employee* new_employee = new Employee;
+    new_employee->id_ = (id);
     new_employee->department_ = (dep);
     new_employee->time_in_service_ = (time);
     employees.push_back(new_employee);
+
 
 }
 
@@ -58,8 +60,8 @@ void Company::printEmployees(std::ostream &output) const {
     //for-loop for printing out all employees in the employees-vector.
 
     for (unsigned long i = 0; i < employees.size(); ++i) {
-        output << employees.at(i)->id_ << employees.at(i)->department_ <<
-                  employees.at(i)->time_in_service_ << std::endl;
+        output << employees.at(i)->id_ << ", " <<employees.at(i)->department_
+               <<", " <<employees.at(i)->time_in_service_ << std::endl;
     }
 
 }
@@ -89,13 +91,14 @@ void Company::addRelation(const std::string &subordinate,
     if (subordPTR != nullptr) {
         Employee* bossPTR = getPointer(boss);
         subordPTR->boss_ = bossPTR;
-        bossPTR->subordinates_.push_back(subordPTR);
+        if (bossPTR != nullptr) {
+            bossPTR->subordinates_.push_back(subordPTR);
+        }
         return;
     }
     //if the id points to a nullpointer, print error, free memory and return.
     else {
         printNotFound(subordinate, output);
-        delete subordPTR;
         return;
     }
 }
@@ -144,10 +147,10 @@ void Company::printSubordinates(const std::string &id, std::ostream &output)
             delete bossPTR;
             return;
         }
-        output << id << " has " << bossPTR->subordinates_.size() << "subordinates:" << std::endl;
+        output << id << " has " << bossPTR->subordinates_.size() << " subordinates:" << std::endl;
         for (unsigned long i = 0; i < bossPTR->subordinates_.size(); ++i) {
-            output << bossPTR->subordinates_.at(i) << std::endl;
-            delete bossPTR;
+            output << bossPTR->subordinates_.at(i)->id_ << std::endl;
+
         }
     }
     else {
@@ -266,13 +269,21 @@ void Company::printDepartment(const std::string &id, std::ostream &output)
  *  Param2: Output-stream for printing
  */
 
-//todo: function.
+
 
 void Company::printLongestTimeInLineManagement(const std::string &id,
                                                std::ostream &output) const {
 
     Employee* workerPTR = getPointer(id);
     Employee* longestServingPTR = workerPTR;
+
+    if (workerPTR == nullptr) {
+        printNotFound(id, output);
+        delete workerPTR;
+        delete longestServingPTR;
+        return;
+    }
+
 
     for (unsigned long i = 0; i < workerPTR->subordinates_.size(); ++i) {
         if (workerPTR->subordinates_.at(i)->time_in_service_ > longestServingPTR->time_in_service_ ) {
@@ -287,6 +298,8 @@ void Company::printLongestTimeInLineManagement(const std::string &id,
 
 
 }
+
+//3 dummy functions for voluntary stuff.
 
 void Company::printShortestTimeInLineManagement(const std::string &id, std::ostream &output) const
 {
@@ -313,6 +326,13 @@ void Company::printSubordinatesN(const std::string &id, const int n, std::ostrea
     }
     if(output) {};
     delete durr;
+}
+
+/*
+ * A function to compare strings, to be used for sorting.
+ */
+bool Company::compareFunction(std::string a, std::string b) {
+    return a<b;
 }
 
 
