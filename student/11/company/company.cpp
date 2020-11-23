@@ -192,9 +192,11 @@ void Company::printColleagues(const std::string &id, std::ostream &output) const
         printNotFound(id, output);
         return;
     }
-
+    //count how many colleagues people have, if boss is a nullpointer, that's
+    //not a real boss
     for (unsigned long i = 0; i < employees.size(); ++i) {
-        if (employees.at(i)->boss_ == bossPTR && employees.at(i)->id_ != workerPTR->id_) {
+        if (employees.at(i)->boss_ == bossPTR && bossPTR != nullptr &&
+                employees.at(i)->id_ != workerPTR->id_) {
             colleagues++;
         }
     }
@@ -204,10 +206,13 @@ void Company::printColleagues(const std::string &id, std::ostream &output) const
         output << id << " has no colleagues." << std::endl;
         return;
     }
+    //print how many colleagues id had
     output << id << " has " << colleagues << " colleagues:" << std::endl;
-
+    //print out id's colleagues, if boss is a nullpointer, that's
+    //not a real boss
     for (unsigned long i = 0; i < employees.size(); ++i) {
-        if (employees.at(i)->boss_ == bossPTR && employees.at(i)->id_ != workerPTR->id_) {
+        if (employees.at(i)->boss_ == bossPTR && bossPTR != nullptr &&
+                employees.at(i)->id_ != workerPTR->id_) {
             output << employees.at(i)->id_ << std::endl;
         }
     }
