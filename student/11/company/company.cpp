@@ -249,7 +249,7 @@ void Company::printDepartment(const std::string &id, std::ostream &output)
         return;
     }
     //A vector to store the colleagues
-    std::vector<Employee> departmentColleagues;
+    std::vector<Employee*> departmentColleagues;
     //Set a pointer to departmentHead
     Employee* departmentHeadPTR = workerPTR->boss_;
     //Find the department head
@@ -258,27 +258,27 @@ void Company::printDepartment(const std::string &id, std::ostream &output)
     }
     //add all the department head's underlings to departmentColleagues
     for (unsigned long i = 0; i < departmentHeadPTR->subordinates_.size(); ++i) {
-        departmentColleagues.push_back(*departmentHeadPTR->subordinates_.at(i));
+        departmentColleagues.push_back(departmentHeadPTR->subordinates_.at(i));
     }
     //then we go through their subordinates and add them to the departmentColleagues as well
     for (unsigned long i = 0; i < departmentColleagues.size(); ++i) {
-        if (departmentColleagues.at(i).subordinates_.size() != 0) {
-            for (unsigned long j = 0; j < departmentColleagues.at(i).subordinates_.size(); ++j) {
-                if (departmentColleagues.at(j).id_ != id) {
-                    departmentColleagues.push_back(*departmentColleagues.at(i).subordinates_.at(j));
+        if (departmentColleagues.at(i)->subordinates_.size() != 0) {
+            for (unsigned long j = 0; j < departmentColleagues.at(i)->subordinates_.size(); ++j) {
+                if (departmentColleagues.at(j)->id_ != id) {
+                    departmentColleagues.push_back(departmentColleagues.at(i)->subordinates_.at(j));
                 }
             }
         }
     }
-    departmentColleagues.push_back(*departmentHeadPTR);
+    departmentColleagues.push_back(departmentHeadPTR);
     //print out the department colleagues
+    std::sort(departmentColleagues.begin(), departmentColleagues.end(), compare);
     output << id << " has " <<departmentColleagues.size()-1 << " department colleagues:" << std::endl;
     for (unsigned long i = 0; i < departmentColleagues.size(); ++i) {
-        output << departmentColleagues.at(i).id_ << std::endl;
+        if (departmentColleagues.at(i)->id_ != id) {
+            output << departmentColleagues.at(i)->id_ << std::endl;
+        }
     }
-
-
-    return;
 }
 
 
