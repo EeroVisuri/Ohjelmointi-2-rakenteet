@@ -45,6 +45,7 @@ void Company::addNewEmployee(const std::string &id, const std::string &dep,
     employees.push_back(new_employee);
 
 
+
 }
 
 /* Description: Prints all stored Employees: ID, department and time in service
@@ -175,6 +176,13 @@ void Company::printColleagues(const std::string &id, std::ostream &output) const
     Employee* bossPTR = workerPTR->boss_;
     int colleagues = 0;
 
+    if (workerPTR == nullptr) {
+        printNotFound(id, output);
+        delete workerPTR;
+        delete bossPTR;
+        return;
+    }
+
     for (unsigned long i = 0; i < employees.size(); ++i) {
         if (employees.at(i)->boss_ == bossPTR && employees.at(i)->id_ != workerPTR->id_) {
             colleagues++;
@@ -184,8 +192,6 @@ void Company::printColleagues(const std::string &id, std::ostream &output) const
     //if there are no colleagues, print out so, free memory and return.
     if (colleagues == 0) {
         output << id << " has no colleagues." << std::endl;
-        delete workerPTR;
-        delete bossPTR;
         return;
     }
     output << id << " has " << colleagues << " department collagues:" << std::endl;
@@ -194,8 +200,6 @@ void Company::printColleagues(const std::string &id, std::ostream &output) const
             output << employees.at(i)->id_ << std::endl;
         }
     }
-    delete workerPTR;
-    delete bossPTR;
 }
 
 /* Description: Prints all-level colleagues for the employee.
@@ -206,9 +210,6 @@ void Company::printColleagues(const std::string &id, std::ostream &output) const
  */
 
 
-//todo: tee vektori, johon tunget työntekijät. Etsi rekursiolla pomo jolla ei
-// ole pomoa, sit etsit työntekijät jotka on tietyllä osastolla
-//jos vector size o 0 = output << id << has no deparment colleagues.
 void Company::printDepartment(const std::string &id, std::ostream &output)
     const {
 
@@ -254,8 +255,6 @@ void Company::printDepartment(const std::string &id, std::ostream &output)
         output << departmentColleagues.at(i).id_ << std::endl;
     }
 
-    delete workerPTR;
-    delete bigbossPTR;
     return;
 
 }
@@ -331,8 +330,8 @@ void Company::printSubordinatesN(const std::string &id, const int n, std::ostrea
 /*
  * A function to compare strings, to be used for sorting.
  */
-bool Company::compareFunction(std::string a, std::string b) {
-    return a<b;
+bool Company::compareFunction(const Employee& lhs, const Employee& rhs) {
+    return lhs.id_ < rhs.id_;
 }
 
 

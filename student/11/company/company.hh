@@ -187,6 +187,10 @@ private:
      * to make things easier and to avoid "copy-paste-coding"
      */
 
+
+    static bool compareFunction(const Employee& lhs, const Employee& rhs);
+
+
     // Return a pointer for ID. Returns nullptr if id doesn't exist.
     Employee* getPointer(const std::string& id) const;
 
