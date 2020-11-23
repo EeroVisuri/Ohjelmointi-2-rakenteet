@@ -204,7 +204,7 @@ void Company::printColleagues(const std::string &id, std::ostream &output) const
         output << id << " has no colleagues." << std::endl;
         return;
     }
-    output << id << " has " << colleagues << " department collagues:" << std::endl;
+    output << id << " has " << colleagues << " department colleagues:" << std::endl;
 
     for (unsigned long i = 0; i < employees.size(); ++i) {
         if (employees.at(i)->boss_ == bossPTR && employees.at(i)->id_ != workerPTR->id_) {
