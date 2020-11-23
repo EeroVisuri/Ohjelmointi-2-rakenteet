@@ -219,12 +219,45 @@ void Company::printDepartment(const std::string &id, std::ostream &output)
     //A vector to store the colleagues
     std::vector<Employee> departmentColleagues;
 
+    Employee* bigbossPTR = nullptr;
+
+    bool has_boss = true;
 
 
+    //find out the top guy of hierarchy
+    while (has_boss) {
+        for (unsigned long i = 0; i < employees.size(); ++i) {
+            if (employees.at(i)->boss_ == nullptr) {
+                bigbossPTR = employees.at(i);
+                has_boss = false;
+            }
+        }
+    }
 
+    //assign everyone in same deparment into the departmentColleagues-vector
+    //except the ID given as parameter
+    for (unsigned long i = 0; i < employees.size(); ++i) {
+        if (employees.at(i)->boss_ == bigbossPTR &&
+                employees.at(i)->department_ == workerPTR->department_ &&
+                employees.at(i) != workerPTR) {
+            departmentColleagues.push_back(*employees.at(i));
+        }
+    }
 
+    //print out the department colleagues
+    output << id << " has " <<departmentColleagues.size() << " department colleagues:" << std::endl;
+
+    for (unsigned long i = 0; i < departmentColleagues.size(); ++i) {
+        output << departmentColleagues.at(i).id_ << std::endl;
+    }
+
+    delete workerPTR;
+    delete bigbossPTR;
+    return;
 
 }
+
+
 
 /* Description: Prints the employee with the longest time in service
  *  in the ID's line management.
@@ -235,9 +268,51 @@ void Company::printDepartment(const std::string &id, std::ostream &output)
 
 //todo: function.
 
-void Company::printLongestTimeInLineManagement(const std::string &id, std::ostream &output) const
-{
+void Company::printLongestTimeInLineManagement(const std::string &id,
+                                               std::ostream &output) const {
 
+    Employee* workerPTR = getPointer(id);
+    Employee* longestServingPTR = workerPTR;
+
+    for (unsigned long i = 0; i < workerPTR->subordinates_.size(); ++i) {
+        if (workerPTR->subordinates_.at(i)->time_in_service_ > longestServingPTR->time_in_service_ ) {
+            longestServingPTR = workerPTR->subordinates_.at(i);
+        }
+
+    }
+    output << "With the time of "<< longestServingPTR->time_in_service_ <<
+              ", "<< longestServingPTR->id_ << " is the longest-served employee in "
+           << id <<"'s line management." << std::endl;
+
+
+
+}
+
+void Company::printShortestTimeInLineManagement(const std::string &id, std::ostream &output) const
+{
+    Employee* durr = getPointer(id);
+    if(output) {};
+    delete durr;
+}
+
+void Company::printBossesN(const std::string &id, const int n, std::ostream &output) const
+{
+    Employee* durr = getPointer(id);
+    for (int i = 0; i < n; ++i) {
+
+    }
+    if(output) {};
+    delete durr;
+}
+
+void Company::printSubordinatesN(const std::string &id, const int n, std::ostream &output) const
+{
+    Employee* durr = getPointer(id);
+    for (int i = 0; i < n; ++i) {
+
+    }
+    if(output) {};
+    delete durr;
 }
 
 
