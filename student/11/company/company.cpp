@@ -163,7 +163,7 @@ void Company::printBoss(const std::string &id, std::ostream &output) const {
  */
 
 void Company::printSubordinates(const std::string &id, std::ostream &output)
-    const {
+const {
 
     Employee* bossPTR = getPointer(id);
     //if the id points to a nullpointer, print error and return.
@@ -240,7 +240,7 @@ void Company::printColleagues(const std::string &id, std::ostream &output) const
 
 
 void Company::printDepartment(const std::string &id, std::ostream &output)
-    const {
+const {
 
     Employee* workerPTR = getPointer(id);
     //if the id points to a nullpointer, print error and return
@@ -250,17 +250,36 @@ void Company::printDepartment(const std::string &id, std::ostream &output)
     }
     //A vector to store the colleagues
     std::vector<Employee*> departmentColleagues;
-    //Set a pointer to departmentHead
-    Employee* departmentHeadPTR = workerPTR->boss_;
+    //Set a pointer to dpmHead
+    Employee* dpmHeadPTR = workerPTR;
     //Find the department head
-    while (departmentHeadPTR->boss_->department_ == workerPTR->department_) {
-        departmentHeadPTR = departmentHeadPTR->boss_;
+    // Carefult we dont run into nullpointers, that'll crash it
+    if (dpmHeadPTR != nullptr) {
+        if (dpmHeadPTR->boss_ != nullptr &&
+                dpmHeadPTR->boss_->department_==workerPTR->department_){
+            while (dpmHeadPTR->boss_->department_ ==
+                   workerPTR->department_ && dpmHeadPTR->boss_ != nullptr) {
+                dpmHeadPTR = dpmHeadPTR->boss_;
+            }
+        }
+
+    }
+    //still afraid of nullpointers
+    if (dpmHeadPTR == nullptr) {
+        output << id << " has no department colleagues." << std::endl;
+        return;
     }
     //add all the department head's underlings to departmentColleagues
-    for (unsigned long i = 0; i < departmentHeadPTR->subordinates_.size(); ++i) {
-        departmentColleagues.push_back(departmentHeadPTR->subordinates_.at(i));
+    for (unsigned long i = 0; i < dpmHeadPTR->subordinates_.size(); ++i) {
+        if (dpmHeadPTR->subordinates_.at(i)->department_ ==
+                workerPTR->department_) {
+            departmentColleagues.push_back(dpmHeadPTR->subordinates_.at(i));
+        }
     }
-    //then we go through their subordinates and add them to the departmentColleagues as well
+
+
+    //then we go through their subordinates and add them to the
+    //departmentColleagues as well
     for (unsigned long i = 0; i < departmentColleagues.size(); ++i) {
         if (departmentColleagues.at(i)->subordinates_.size() != 0) {
             for (unsigned long j = 0; j < departmentColleagues.at(i)->subordinates_.size(); ++j) {
@@ -270,10 +289,19 @@ void Company::printDepartment(const std::string &id, std::ostream &output)
             }
         }
     }
-    departmentColleagues.push_back(departmentHeadPTR);
+    //put the department head as colleague as well
+    departmentColleagues.push_back(dpmHeadPTR);
+    if (departmentColleagues.size() == 0) {
+        output << id << " has no department colleagues." << std::endl;
+        return;
+    }
     //print out the department colleagues
-    std::sort(departmentColleagues.begin(), departmentColleagues.end(), compare);
-    output << id << " has " <<departmentColleagues.size()-1 << " department colleagues:" << std::endl;
+    if (departmentColleagues.size() > 2) {
+        std::sort(departmentColleagues.begin(), departmentColleagues.end(), compare);
+    }
+
+    output << id << " has " << departmentColleagues.size()-1 <<
+              " department colleagues:" << std::endl;
     for (unsigned long i = 0; i < departmentColleagues.size(); ++i) {
         if (departmentColleagues.at(i)->id_ != id) {
             output << departmentColleagues.at(i)->id_ << std::endl;
@@ -307,7 +335,8 @@ void Company::printLongestTimeInLineManagement(const std::string &id,
 
 
     for (unsigned long i = 0; i < workerPTR->subordinates_.size(); ++i) {
-        if (workerPTR->subordinates_.at(i)->time_in_service_ > longestServingPTR->time_in_service_ ) {
+        if (workerPTR->subordinates_.at(i)->time_in_service_ >
+                longestServingPTR->time_in_service_ ) {
             longestServingPTR = workerPTR->subordinates_.at(i);
         }
 
