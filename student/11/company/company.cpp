@@ -230,29 +230,22 @@ void Company::printDepartment(const std::string &id, std::ostream &output)
     const {
 
     Employee* workerPTR = getPointer(id);
-    //if the id points to a nullpointer, print error, free memory and return.
+    //if the id points to a nullpointer, print error and return
     if (workerPTR == nullptr) {
         printNotFound(id, output);
-        delete workerPTR;
         return;
     }
     //A vector to store the colleagues
     std::vector<Employee> departmentColleagues;
 
-    Employee* bigbossPTR = nullptr;
+    Employee* bigbossPTR = workerPTR->boss_;
 
-    bool has_boss = true;
-
-
-    //find out the top guy of hierarchy
-    while (has_boss) {
-        for (unsigned long i = 0; i < employees.size(); ++i) {
-            if (employees.at(i)->boss_ == nullptr) {
-                bigbossPTR = employees.at(i);
-                has_boss = false;
-            }
-        }
+    while (bigbossPTR->boss_->department_ == workerPTR->department_) {
+        bigbossPTR = bigbossPTR->boss_;
     }
+
+    output << bigbossPTR->id_ << "<- department head hopefully" << std::endl;
+
 
     //assign everyone in same deparment into the departmentColleagues-vector
     //except the ID given as parameter
@@ -263,7 +256,7 @@ void Company::printDepartment(const std::string &id, std::ostream &output)
             departmentColleagues.push_back(*employees.at(i));
         }
     }
-
+    departmentColleagues.push_back(*bigbossPTR);
     //print out the department colleagues
     output << id << " has " <<departmentColleagues.size() << " department colleagues:" << std::endl;
 
