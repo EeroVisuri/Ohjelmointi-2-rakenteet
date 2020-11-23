@@ -173,7 +173,10 @@ public:
     void printSubordinatesN(const std::string& id, const int n,
                             std::ostream& output) const;
 
+
 private:
+
+
 
     //data structure where we store the employees of the company.
     //The boss-subordinate relationship can be found in every
@@ -188,8 +191,7 @@ private:
      */
 
 
-    static bool compareFunction(const Employee& lhs, const Employee& rhs);
-
+    static bool comp(const Employee* a, const Employee* b);
 
     // Return a pointer for ID. Returns nullptr if id doesn't exist.
     Employee* getPointer(const std::string& id) const;

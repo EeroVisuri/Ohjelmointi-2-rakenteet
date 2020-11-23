@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <memory>
 
+
 /* Description: Adds a new Employee to the datastructure.
  * Parameters:
  *  Param1: Employee's ID string
@@ -21,6 +22,10 @@ Company::Company()
 Company::~Company()
 {
 
+}
+
+bool compare(const Employee* a, const Employee* b) {
+    return a->id_ < b->id_;
 }
 
 void Company::addNewEmployee(const std::string &id, const std::string &dep,
@@ -43,7 +48,9 @@ void Company::addNewEmployee(const std::string &id, const std::string &dep,
     new_employee->department_ = (dep);
     new_employee->time_in_service_ = (time);
     employees.push_back(new_employee);
-
+    if (employees.size() > 2) {
+        std::sort(employees.begin(), employees.end(), compare);
+    }
 
 
 }
@@ -57,6 +64,10 @@ void Company::addNewEmployee(const std::string &id, const std::string &dep,
 
 
 void Company::printEmployees(std::ostream &output) const {
+
+
+
+
 
     //for-loop for printing out all employees in the employees-vector.
 
@@ -327,12 +338,7 @@ void Company::printSubordinatesN(const std::string &id, const int n, std::ostrea
     delete durr;
 }
 
-/*
- * A function to compare strings, to be used for sorting.
- */
-bool Company::compareFunction(const Employee& lhs, const Employee& rhs) {
-    return lhs.id_ < rhs.id_;
-}
+
 
 
 
@@ -355,5 +361,6 @@ Employee* Company::getPointer(const std::string &id) const {
 void Company::printNotFound(const std::string &id, std::ostream &output) const{
     output << "Error. " << id << " not found." << std::endl;
 }
+
 
 
