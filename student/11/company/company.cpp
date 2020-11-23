@@ -133,7 +133,7 @@ void Company::printBoss(const std::string &id, std::ostream &output) const {
             return;
         }
         output << id << " has " << "1" << " bosses:" << std::endl;
-        output << workerPTR->boss_ << std::endl;
+        output << workerPTR->boss_->id_ << std::endl;
         delete workerPTR;
     }
     else {
@@ -199,12 +199,12 @@ void Company::printColleagues(const std::string &id, std::ostream &output) const
         }
     }
 
-    //if there are no colleagues, print out so, free memory and return.
+    //if there are no colleagues, print out so
     if (colleagues == 0) {
         output << id << " has no colleagues." << std::endl;
         return;
     }
-    output << id << " has " << colleagues << " department colleagues:" << std::endl;
+    output << id << " has " << colleagues << " colleagues:" << std::endl;
 
     for (unsigned long i = 0; i < employees.size(); ++i) {
         if (employees.at(i)->boss_ == bossPTR && employees.at(i)->id_ != workerPTR->id_) {
@@ -301,9 +301,17 @@ void Company::printLongestTimeInLineManagement(const std::string &id,
         }
 
     }
-    output << "With the time of "<< longestServingPTR->time_in_service_ <<
-              ", "<< longestServingPTR->id_ << " is the longest-served employee in "
-           << id <<"'s line management." << std::endl;
+    if (workerPTR == longestServingPTR) {
+        output << "With the time of "<< longestServingPTR->time_in_service_ <<
+                  ", "<< longestServingPTR->id_ << " is the longest-served employee in "
+               << "their line management." << std::endl;
+    }
+    else {
+        output << "With the time of "<< longestServingPTR->time_in_service_ <<
+                  ", "<< longestServingPTR->id_ << " is the longest-served employee in "
+               << id <<"'s line management." << std::endl;
+    }
+
 
 
 
