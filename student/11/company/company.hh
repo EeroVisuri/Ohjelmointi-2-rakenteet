@@ -191,8 +191,6 @@ private:
      */
 
 
-    static bool comp(const Employee* a, const Employee* b);
-
     // Return a pointer for ID. Returns nullptr if id doesn't exist.
     Employee* getPointer(const std::string& id) const;
 

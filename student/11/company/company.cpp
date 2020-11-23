@@ -24,10 +24,24 @@ Company::~Company()
 
 }
 
+
+//comparison function for ordering vectors alphabetically
+
 bool compare(const Employee* a, const Employee* b) {
     return a->id_ < b->id_;
 }
 
+
+/* Description: Adds a new Employee to the datastructure.
+ * Parameters:
+ *  Param1: Employee's ID string
+ *  Param2: Employee's department
+ *  Param3: Employee's time in service
+ *  Param4: Output-stream for error-printing
+ * Errormessages:
+ *  If employees's ID is already in datastructure:
+ *      "Error. Employee already added."
+ */
 void Company::addNewEmployee(const std::string &id, const std::string &dep,
                              const double &time, std::ostream &output) {
 
@@ -152,11 +166,10 @@ void Company::printSubordinates(const std::string &id, std::ostream &output)
     const {
 
     Employee* bossPTR = getPointer(id);
-    //if the id points to a nullpointer, print error, free memory and return.
+    //if the id points to a nullpointer, print error and return.
     if (bossPTR != nullptr) {
         if (bossPTR->subordinates_.size() == 0) {
             output << id << " has no subordinates." << std::endl;
-            delete bossPTR;
             return;
         }
         output << id << " has " << bossPTR->subordinates_.size() << " subordinates:" << std::endl;
@@ -237,35 +250,35 @@ void Company::printDepartment(const std::string &id, std::ostream &output)
     }
     //A vector to store the colleagues
     std::vector<Employee> departmentColleagues;
-
-    Employee* bigbossPTR = workerPTR->boss_;
-
-    while (bigbossPTR->boss_->department_ == workerPTR->department_) {
-        bigbossPTR = bigbossPTR->boss_;
+    //Set a pointer to departmentHead
+    Employee* departmentHeadPTR = workerPTR->boss_;
+    //Find the department head
+    while (departmentHeadPTR->boss_->department_ == workerPTR->department_) {
+        departmentHeadPTR = departmentHeadPTR->boss_;
     }
-
-    output << bigbossPTR->id_ << "<- department head hopefully" << std::endl;
-
-
-    //assign everyone in same deparment into the departmentColleagues-vector
-    //except the ID given as parameter
-    for (unsigned long i = 0; i < employees.size(); ++i) {
-        if (employees.at(i)->boss_ == bigbossPTR &&
-                employees.at(i)->department_ == workerPTR->department_ &&
-                employees.at(i) != workerPTR) {
-            departmentColleagues.push_back(*employees.at(i));
+    //add all the department head's underlings to departmentColleagues
+    for (unsigned long i = 0; i < departmentHeadPTR->subordinates_.size(); ++i) {
+        departmentColleagues.push_back(*departmentHeadPTR->subordinates_.at(i));
+    }
+    //then we go through their subordinates and add them to the departmentColleagues as well
+    for (unsigned long i = 0; i < departmentColleagues.size(); ++i) {
+        if (departmentColleagues.at(i).subordinates_.size() != 0) {
+            for (unsigned long j = 0; j < departmentColleagues.at(i).subordinates_.size(); ++j) {
+                if (departmentColleagues.at(j).id_ != id) {
+                    departmentColleagues.push_back(*departmentColleagues.at(i).subordinates_.at(j));
+                }
+            }
         }
     }
-    departmentColleagues.push_back(*bigbossPTR);
+    departmentColleagues.push_back(*departmentHeadPTR);
     //print out the department colleagues
-    output << id << " has " <<departmentColleagues.size() << " department colleagues:" << std::endl;
-
+    output << id << " has " <<departmentColleagues.size()-1 << " department colleagues:" << std::endl;
     for (unsigned long i = 0; i < departmentColleagues.size(); ++i) {
         output << departmentColleagues.at(i).id_ << std::endl;
     }
 
-    return;
 
+    return;
 }
 
 
@@ -343,6 +356,8 @@ void Company::printSubordinatesN(const std::string &id, const int n, std::ostrea
     if(output) {};
     delete durr;
 }
+
+
 
 
 
