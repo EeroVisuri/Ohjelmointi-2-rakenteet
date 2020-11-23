@@ -160,6 +160,7 @@ void Company::printSubordinates(const std::string &id, std::ostream &output)
             return;
         }
         output << id << " has " << bossPTR->subordinates_.size() << " subordinates:" << std::endl;
+        std::sort(bossPTR->subordinates_.begin(),bossPTR->subordinates_.end(), compare);
         for (unsigned long i = 0; i < bossPTR->subordinates_.size(); ++i) {
             output << bossPTR->subordinates_.at(i)->id_ << std::endl;
 
@@ -189,8 +190,6 @@ void Company::printColleagues(const std::string &id, std::ostream &output) const
 
     if (workerPTR == nullptr) {
         printNotFound(id, output);
-        delete workerPTR;
-        delete bossPTR;
         return;
     }
 
@@ -206,6 +205,7 @@ void Company::printColleagues(const std::string &id, std::ostream &output) const
         return;
     }
     output << id << " has " << colleagues << " department collagues:" << std::endl;
+
     for (unsigned long i = 0; i < employees.size(); ++i) {
         if (employees.at(i)->boss_ == bossPTR && employees.at(i)->id_ != workerPTR->id_) {
             output << employees.at(i)->id_ << std::endl;
