@@ -253,16 +253,20 @@ const {
     //Set a pointer to dpmHead
     Employee* dpmHeadPTR = workerPTR;
     //Find the department head
-    // Carefult we dont run into nullpointers, that'll crash it
-    if (dpmHeadPTR != nullptr) {
+    // Careful that we dont run into nullpointers, that'll crash it
+
+
+    if (dpmHeadPTR != nullptr && dpmHeadPTR->boss_ != nullptr) {
         if (dpmHeadPTR->boss_ != nullptr &&
                 dpmHeadPTR->boss_->department_==workerPTR->department_){
-            while (dpmHeadPTR->boss_->department_ ==
-                   workerPTR->department_ && dpmHeadPTR->boss_ != nullptr) {
+            while (dpmHeadPTR->boss_ != nullptr && dpmHeadPTR->boss_->department_ ==
+                   workerPTR->department_ ) {
                 dpmHeadPTR = dpmHeadPTR->boss_;
             }
         }
-
+        else if (dpmHeadPTR->boss_ == nullptr) {
+            output << "U broke it" << std::endl;
+        }
     }
     //still afraid of nullpointers
     if (dpmHeadPTR == nullptr) {
@@ -296,7 +300,7 @@ const {
         return;
     }
     //print out the department colleagues
-    if (departmentColleagues.size() > 2) {
+    if (departmentColleagues.size() > 1) {
         std::sort(departmentColleagues.begin(), departmentColleagues.end(), compare);
     }
 
