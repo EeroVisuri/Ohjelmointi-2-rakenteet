@@ -304,13 +304,15 @@ const {
         std::sort(departmentColleagues.begin(), departmentColleagues.end(), compare);
     }
 
-    output << id << " has " << departmentColleagues.size()-1 <<
-              " department colleagues:" << std::endl;
-
     if (departmentColleagues.size() == 1 && departmentColleagues.at(0)->id_ == id) {
         output << id << " has "<< "no department colleagues." << std::endl;
         return;
     }
+
+    output << id << " has " << departmentColleagues.size()-1 <<
+              " department colleagues:" << std::endl;
+
+
 
     for (unsigned long i = 0; i < departmentColleagues.size(); ++i) {
         if (departmentColleagues.at(i)->id_ != id) {
