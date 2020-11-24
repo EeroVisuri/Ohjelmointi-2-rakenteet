@@ -256,6 +256,7 @@ const {
     // Careful that we dont run into nullpointers, that'll crash it
 
 
+    output << "Hi from 259" <<std::endl;
     if (dpmHeadPTR != nullptr && dpmHeadPTR->boss_ != nullptr) {
         if (dpmHeadPTR->boss_ != nullptr &&
                 dpmHeadPTR->boss_->department_==workerPTR->department_){
@@ -264,15 +265,19 @@ const {
                 dpmHeadPTR = dpmHeadPTR->boss_;
             }
         }
+        output << "Hi from 268" <<std::endl;
         else if (dpmHeadPTR->boss_ == nullptr) {
             output << "U broke it" << std::endl;
+            return;
         }
     }
     //still afraid of nullpointers
+    output << "Hi from 275" <<std::endl;
     if (dpmHeadPTR == nullptr) {
         output << id << " has no department colleagues." << std::endl;
         return;
     }
+    output << "Hi from 280" <<std::endl;
     //add all the department head's underlings to departmentColleagues
     for (unsigned long i = 0; i < dpmHeadPTR->subordinates_.size(); ++i) {
         if (dpmHeadPTR->subordinates_.at(i)->department_ ==
@@ -281,7 +286,7 @@ const {
         }
     }
 
-
+    output << "Hi from 289" <<std::endl;
     //then we go through their subordinates and add them to the
     //departmentColleagues as well
     for (unsigned long i = 0; i < departmentColleagues.size(); ++i) {
@@ -293,6 +298,7 @@ const {
             }
         }
     }
+    output << "Hi from 301" <<std::endl;
     //put the department head as colleague as well
     departmentColleagues.push_back(dpmHeadPTR);
     if (departmentColleagues.size() == 0) {
@@ -303,7 +309,7 @@ const {
     if (departmentColleagues.size() > 1) {
         std::sort(departmentColleagues.begin(), departmentColleagues.end(), compare);
     }
-
+    output << "Hi from 312" <<std::endl;
     output << id << " has " << departmentColleagues.size()-1 <<
               " department colleagues:" << std::endl;
     for (unsigned long i = 0; i < departmentColleagues.size(); ++i) {
