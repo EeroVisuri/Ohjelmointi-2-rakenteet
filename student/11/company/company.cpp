@@ -306,6 +306,12 @@ const {
 
     output << id << " has " << departmentColleagues.size()-1 <<
               " department colleagues:" << std::endl;
+
+    if (departmentColleagues.size() == 1 && departmentColleagues.at(0)->id_ == id) {
+        output << id << " has "<< "no department colleagues." << std::endl;
+        return;
+    }
+
     for (unsigned long i = 0; i < departmentColleagues.size(); ++i) {
         if (departmentColleagues.at(i)->id_ != id) {
             output << departmentColleagues.at(i)->id_ << std::endl;
