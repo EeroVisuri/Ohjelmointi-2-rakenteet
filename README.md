@@ -3,4 +3,5 @@ Ohjelmointi 2: Rakenteet / Programming 2: Structures
 Syksy/Autumn 2020
 
 Tämä repo sisältää opiskelijalle jaettavat materiaalit.
-This repository contains materials for students.
+
+//Projektit ladattu githubiin kun ne toimivat. Osa materiaalista on Tampereen Yliopistolta, ratkaisut itse kirjoittamiani. 
